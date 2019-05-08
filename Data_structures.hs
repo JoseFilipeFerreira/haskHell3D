@@ -1,0 +1,59 @@
+{-|
+Module      : Data_structures
+Description : Module containig all data structures for haskHell 3D
+-}
+module Data_structures where
+
+    import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
+    import Graphics.Gloss.Data.Color
+    -- | Estado do jogo:
+    data Estado = Estado
+                  { mapa     :: [Wall]
+                  , player   :: Player
+                  , actions  :: Actions
+                  , winSize  :: (Int, Int) -- ^ Contém o tamanho da janela em que o jogo está a correr
+                  }
+
+    -- | Define walls as the two ends and it's color
+    data Wall = Wall
+                  { positionX :: Coor
+                  , positionY :: Coor
+                  , wColor     :: Color
+                  }
+
+    type Coor = (Float, Float)
+
+    data Player = Player
+                  { coor  :: Coor
+                  , ang   :: Float
+                  , xMove :: Float -- ^ store mouse displacement
+                  }
+
+    data Actions = Actions
+                  { walk     :: Bool
+                  , moonWalk :: Bool
+                  , walkL    :: Bool
+                  , walkR    :: Bool
+                  , shoot    :: Bool
+                  }
+
+    data Images = Images
+                  { caca :: Picture
+                  , coco :: Picture
+                  }
+    
+    distPlayerWall:: Player -> Wall -> Float
+    distPlayerWall p w = maximum[distCoor (x0, y0) (x1, y1),distCoor (x0, y0) (x2, y2)]
+            where
+                (x1, y1) = positionX w 
+                (x2, y2) = positionY w
+                (x0, y0) = coor p
+                lineNear = abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / sqrt(((y2-y1)**2) + ((x2 - x1)**2))
+        
+    distCoor:: Coor -> Coor -> Float
+    distCoor (x0, y0) (x1, y1) = sqrt((x1 - x0)^2 + (y1 - y0)^2)
+
+    normalize:: Float -> Float -> Float -> Float
+    normalize min max v | v > max = normalize min max (v - max + min)
+                        | v < min = normalize min max (v + max - min)
+                        | otherwise = v 
