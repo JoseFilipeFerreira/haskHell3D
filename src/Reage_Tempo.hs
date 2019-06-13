@@ -7,6 +7,8 @@ module Reage_Tempo where
     import Data_structures
     import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
     import Graphics.Gloss.Data.Color
+    import Graphics.Gloss.Geometry.Line
+    import Data.Maybe
 
     walkSpeed :: Float
     walkSpeed = 3
@@ -14,7 +16,7 @@ module Reage_Tempo where
     -- * Reagir a Tempo
     -- | Função que altera o 'Estado' do jogo com base no tempo que passou 
     reageTempo :: Float -> Estado -> Estado
-    reageTempo tick e = moveMap tick $ rotateMap tick e
+    reageTempo tick e = rotateMap tick $ moveMap tick e
                       
     
     rotateMap:: Float -> Estado -> Estado
@@ -32,25 +34,24 @@ module Reage_Tempo where
 
     
     moveMap::Float -> Estado -> Estado
-    moveMap tick e | any (wallIntercept vec) (mapa e) = e
-                   | otherwise                        = e{mapa = map (moveWall vec) (mapa e)}
+    moveMap tick e | length interPoints > 0 = e
+                   | otherwise              = e{mapa = map (moveWall vec) (mapa e)}
         where
             vec = getVecTranslate tick e
+            interPoints = filter isJust $ map (wallIntercept vec) (mapa e)
 
         
-    wallIntercept:: (Float, Float) -> Wall -> Bool
-    wallIntercept (px, py) (Wall pi pf _) = doIntersect (0,0) (-px, -py) pi pf
+    wallIntercept :: (Float, Float) -> Wall -> Maybe Coor
+    wallIntercept (px, py) (Wall pi pf _) = intersectSegSeg (0,0) (-px, -py) pi pf
 
     getVecTranslate::Float -> Estado -> (Float, Float)
-    getVecTranslate tick e | walkL $ actions e    = (xSV, ySV)
-                           | walkR $ actions e    = (-xSV, -ySV)
-                           | walk $ actions e     = (-xV, -yV)
-                           | moonWalk $ actions e = (xV, yV)
-                           | otherwise            = (0, 0)
+    getVecTranslate tick e | walkL $ actions e    = (0    , -dist)
+                           | walkR $ actions e    = (0    ,  dist)
+                           | walk $ actions e     = (-dist,  0   )
+                           | moonWalk $ actions e = (dist ,  0   ) 
+                           | otherwise            = (0    ,  0   )
                       where
                         dist = tick * walkSpeed
-                        (xV, yV) = vetAngToCoor (ang  $ player e, dist)
-                        (xSV, ySV) = vetAngToCoor (90 + ang (player e), dist)
 
     moveWall:: (Float, Float) -> Wall -> Wall
     moveWall (x, y) (Wall (x1, y1) (x2, y2) cor) = (Wall p1n p2n cor)
@@ -63,11 +64,6 @@ module Reage_Tempo where
                 where
                     x = n * cos   (grauToRad a)
                     y = - n * sin (grauToRad a)
-    
+
     grauToRad:: Float -> Float
     grauToRad x = x * pi / 180
-    
-    doIntersect :: Coor -> Coor -> Coor -> Coor -> Bool
-    doIntersect p1 q1 p2 q2 = isJust pInt
-        where 
-            pInt = intersectSegSeg p1 q1 p2 q2
