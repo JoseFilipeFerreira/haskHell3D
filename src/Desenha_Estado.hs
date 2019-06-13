@@ -5,6 +5,8 @@ Description : Module draw state haskHell 3D
 module Desenha_Estado where
 
     import Data_structures
+    import Constantes
+    import Reage_Tempo
     import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
     import Graphics.Gloss.Data.Color
     import Data.List
@@ -13,7 +15,7 @@ module Desenha_Estado where
     -- * Desenhar um 'Estado'
     -- | Função responsável por desenhar o jogo.
     desenhaEstado :: Estado -> Picture
-    desenhaEstado e = Rotate (-90) $ Scale 20 20 $ Pictures[drawnWalls, drawnPlayer e]
+    desenhaEstado e = Rotate (-90) $ Scale 20 20 $ Pictures[drawnWalls, drawnPlayer e, drawViewBox]
         where
             drawnWalls = Pictures $ map drawWall (mapa e)
     
@@ -22,6 +24,14 @@ module Desenha_Estado where
 
     drawWall :: Wall -> Picture
     drawWall (Wall p1 p2 col) = color col $ Line[p1, p2]
+
+    drawViewBox :: Picture
+    drawViewBox = Line[pn1, pn2, pf2, pf1]
+        where
+            pn1 = (nearPlane, nearPlane * tan $ grauToRad -viewAngle/2)
+            pn2 = (nearPlane, nearPlane * tan $ grauToRad viewAngle/2)
+            pf1 = (farPlane , farPlane  * tan $ grauToRad $ -viewAngle/2)
+            pf2 = (farPlane , farPlane  * tan $ grauToRad $  viewAngle/2) 
 
     -- | Draws the aim in the screen
     target:: Color -> Float -> Picture

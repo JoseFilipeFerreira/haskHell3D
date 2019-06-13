@@ -5,12 +5,11 @@ Description : Module react time haskHell 3D
 module Reage_Evento where
 
     import Data_structures
+    import Constantes
     import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
     import Graphics.Gloss.Data.Color
     import Graphics.Gloss.Interface.Pure.Game
 
-    arrowRotationSpeed :: Float
-    arrowRotationSpeed = 180
 
     reageEvento :: Event -> Estado -> Estado
     reageEvento (EventResize size)             e = e {winSize = size}
