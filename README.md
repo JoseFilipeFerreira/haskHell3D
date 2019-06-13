@@ -1,6 +1,7 @@
 # haskHell3D
 
-Haskell-Gloss Doom-like 3D shooter
+Implementation of a 3D shooter that uses the same mechanics
+as Doom to simulate 3D programmed in Haskell and Gloss
 
 ## Getting Started
 ### Setting up
