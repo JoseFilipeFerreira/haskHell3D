@@ -19,24 +19,34 @@ module Main where
     Compilar com o GHC.
     -}
     main :: IO ()
-    main = do inicio <- estadoInicial
+    main = do inicio <- initialState
               joga inicio
     
     -- | Função que controla o jogo
     joga:: Estado -> IO()
     joga inicio = play
-          (InWindow  "haskHell 3D" (1280,720) (0,0) )                -- Janela onde irá correr o jogo      
-          (greyN 0.8)                                                   -- Cor do fundo da janela.
-          30                                                            -- Frame Rate
-          inicio                                                        -- Fundo inicial do jogo.
-          desenhaEstado                                                 -- Desenha o Estado do jogo.
-          reageEvento                                                   -- Reage a um Evento.
-          reageTempo                                                    -- Reage ao passar do Tempo.
+          (InWindow  "haskHell 3D" (1280,720) (0,0) )       -- Janela onde irá correr o jogo      
+          (greyN 0.8)                                       -- Cor do fundo da janela.
+          30                                                -- Frame Rate
+          inicio                                            -- Fundo inicial do jogo.
+          desenhaEstado                                     -- Desenha o Estado do jogo.
+          reageEvento                                       -- Reage a um Evento.
+          reageTempo                                        -- Reage ao passar do Tempo.
 
+    initialState :: IO Estado
+    initialState = do  
+                        let defaultPlayer = Player 0 0
+                        let defaultAction = Actions False False False False False
+                        return Estado { mapa = testMap
+                                      , player = defaultPlayer
+                                      , actions = defaultAction
+                                      , winSize = (0,0)
+                                      }
+    
     testMap::[Wall]
-    testMap = [ Wall (0,0) (0,6)  black
-              , Wall (0,0) (10,0) black
-              , Wall (10,0) (10,1) black
+    testMap = [ Wall (-1,-1) (-1,6)  black
+              , Wall (-1,-1) (10,-1) black
+              , Wall (10,-1) (10,1) black
               , Wall (10,1) (15,1) black
               , Wall (15,1) (15,3) black
               , Wall (15,3) (16,3) black
@@ -50,7 +60,7 @@ module Main where
               , Wall (1,14) (1,8) black
               , Wall (1,8) (4,8) black
               , Wall (4,8) (4,6) black
-              , Wall (4,6) (0,6) black
+              , Wall (4,6) (-1,6) black
               , Wall (6,6) (6,8) black
               , Wall (6,8) (9,8) black
               , Wall (9,8) (9,9) black
@@ -62,14 +72,3 @@ module Main where
               , Wall (10,4) (10,6) black
               , Wall (10,6) (6,6) black
               ]
-
-    -- | Função que devolve uma Picture a partir de um Estado.
-    estadoInicial :: IO Estado
-    estadoInicial = do  
-                        let defaultPlayer = Player 0 0
-                        let defaultAction = Actions False False False False False
-                        return Estado { mapa = testMap
-                                      , player = defaultPlayer
-                                      , actions = defaultAction
-                                      , winSize = (0,0)
-                                      }

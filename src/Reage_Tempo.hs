@@ -32,7 +32,14 @@ module Reage_Tempo where
 
     
     moveMap::Float -> Estado -> Estado
-    moveMap tick e = e{mapa = map (moveWall $ getVecTranslate tick e) (mapa e)}
+    moveMap tick e | any (wallIntercept vec) (mapa e) = e
+                   | otherwise                        = e{mapa = map (moveWall vec) (mapa e)}
+        where
+            vec = getVecTranslate tick e
+
+        
+    wallIntercept:: (Float, Float) -> Wall -> Bool
+    wallIntercept (px, py) (Wall pi pf _) = doIntersect (0,0) (-px, -py) pi pf
 
     getVecTranslate::Float -> Estado -> (Float, Float)
     getVecTranslate tick e | walkL $ actions e    = (xSV, ySV)
