@@ -41,7 +41,6 @@ module Reage_Tempo where
                            | moonWalk $ actions e = (xV, yV)
                            | otherwise            = (0, 0)
                       where
-                        (xP, yP) = coor $ player e
                         dist = tick * walkSpeed
                         (xV, yV) = vetAngToCoor (ang  $ player e, dist)
                         (xSV, ySV) = vetAngToCoor (90 + ang (player e), dist)

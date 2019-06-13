@@ -24,8 +24,7 @@ module Data_structures where
     type Coor = (Float, Float)
 
     data Player = Player
-                  { coor  :: Coor
-                  , ang   :: Float
+                  { ang :: Float
                   , xMove :: Float -- ^ store mouse displacement
                   }
 
@@ -42,14 +41,6 @@ module Data_structures where
                   , coco :: Picture
                   }
     
-    distPlayerWall:: Player -> Wall -> Float
-    distPlayerWall p w = maximum[distCoor (x0, y0) (x1, y1),distCoor (x0, y0) (x2, y2)]
-            where
-                (x1, y1) = positionX w 
-                (x2, y2) = positionY w
-                (x0, y0) = coor p
-                lineNear = abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1) / sqrt(((y2-y1)**2) + ((x2 - x1)**2))
-        
     distCoor:: Coor -> Coor -> Float
     distCoor (x0, y0) (x1, y1) = sqrt((x1 - x0)^2 + (y1 - y0)^2)
 

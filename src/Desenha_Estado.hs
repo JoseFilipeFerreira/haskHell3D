@@ -18,10 +18,7 @@ module Desenha_Estado where
             drawnWalls = Pictures $ map drawWall (mapa e)
     
     drawnPlayer :: Estado -> Picture
-    drawnPlayer e = Translate xp yp $ Rotate (a + 90) $ color red $ Scale 10 10 $ Polygon[(1,0),(-1,0),(0,1)]
-        where
-            (xp, yp) = coor $ player e
-            a = ang $ player e
+    drawnPlayer e = Rotate (90) $ color red $ Scale 10 10 $ Polygon[(1,0),(-1,0),(0,1)]
 
     drawWall :: Wall -> Picture
     drawWall (Wall p1 p2 col) = Scale 10 10 $ color col $ Line[p1, p2]
