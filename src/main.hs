@@ -52,8 +52,7 @@ testMap = [ Wall (-1,-1) (-1,6)  black
           , Wall (15,3) (16,3) black
           , Wall (16,3) (16,5) black
           , Wall (16,5) (17,5) black
-          , Wall (17,5) (17,12) black
-          , Wall (17,12) (17,13) black
+          , Wall (17,5) (17,13) black
           , Wall (17,13) (13,13) black
           , Wall (13,13) (13,14) black
           , Wall (13,14) (1,14) black
