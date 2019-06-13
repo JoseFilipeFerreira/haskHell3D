@@ -9,6 +9,9 @@ module Reage_Evento where
     import Graphics.Gloss.Data.Color
     import Graphics.Gloss.Interface.Pure.Game
 
+    arrowRotationSpeed :: Float
+    arrowRotationSpeed = 180
+
     reageEvento :: Event -> Estado -> Estado
     reageEvento (EventResize size)             e = e {winSize = size}
     reageEvento (EventKey (Char 'w') Down _ _) e = e{actions = (actions e){walk  = True}}
@@ -24,8 +27,12 @@ module Reage_Evento where
     reageEvento (EventKey (MouseButton LeftButton) Down _ _) e = e{actions = (actions e){shoot = True}}
     reageEvento (EventKey (MouseButton LeftButton) Up   _ _) e = e{actions = (actions e){shoot = False}}
     reageEvento (EventMotion (x,_))                          e = e{player = (player e){xMove = x}}
-    reageEvento (EventKey (SpecialKey KeyLeft)    Down _ _)  e = e{player = (player e){xMove = -20}}
-    reageEvento (EventKey (SpecialKey KeyLeft)    Up _ _)    e = e{player = (player e){xMove = 0}}
-    reageEvento (EventKey (SpecialKey KeyRight)   Down _ _)  e = e{player = (player e){xMove = 20}}
-    reageEvento (EventKey (SpecialKey KeyRight)   Up _ _)    e = e{player = (player e){xMove = 0}}
+    reageEvento (EventKey (SpecialKey KeyLeft)    Down _ _)  e = e{player = (player e){xMove = -arrowRotationSpeed}}
+    reageEvento (EventKey (SpecialKey KeyLeft)    Up _ _)    e = e{player = (player e){xMove = nMove}}
+        where
+            nMove = if (xMove(player e) == -arrowRotationSpeed) then 0 else xMove $ player e
+    reageEvento (EventKey (SpecialKey KeyRight)   Down _ _)  e = e{player = (player e){xMove = arrowRotationSpeed}}
+    reageEvento (EventKey (SpecialKey KeyRight)   Up _ _)    e = e{player = (player e){xMove = nMove}}
+        where
+            nMove = if (xMove(player e) == arrowRotationSpeed) then 0 else xMove $ player e
     reageEvento _ e = e
