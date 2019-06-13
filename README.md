@@ -9,11 +9,7 @@ as Doom to simulate 3D programmed in Haskell and Gloss
 * Make sure you have [Gloss](http://hackage.haskell.org/package/gloss) installed
 
 ```
-ghc main.hs
-```
-
-```
-./main
+cd src && sh build.sh
 ```
 
 ## Dependency
