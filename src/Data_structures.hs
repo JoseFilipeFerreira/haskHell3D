@@ -6,6 +6,8 @@ module Data_structures where
 
     import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
     import Graphics.Gloss.Data.Color
+    import Graphics.Gloss.Geometry.Line
+    import Data.Maybe
     -- | Estado do jogo:
     data Estado = Estado
                   { mapa     :: [Wall]
@@ -44,7 +46,12 @@ module Data_structures where
     distCoor:: Coor -> Coor -> Float
     distCoor (x0, y0) (x1, y1) = sqrt((x1 - x0)^2 + (y1 - y0)^2)
 
-    normalize:: Float -> Float -> Float -> Float
     normalize min max v | v > max = normalize min max (v - max + min)
                         | v < min = normalize min max (v + max - min)
-                        | otherwise = v 
+                        | otherwise = v
+
+
+    doIntersect :: Coor -> Coor -> Coor -> Coor -> Bool
+    doIntersect p1 q1 p2 q2 = isJust pInt
+        where 
+            pInt = intersectSegSeg p1 q1 p2 q2
