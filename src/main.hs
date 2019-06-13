@@ -35,7 +35,7 @@ module Main where
 
     initialState :: IO Estado
     initialState = do  
-                        let defaultPlayer = Player 0 0
+                        let defaultPlayer = Player 0
                         let defaultAction = Actions False False False False False
                         return Estado { mapa = testMap
                                       , player = defaultPlayer
