@@ -67,3 +67,7 @@ module Reage_Tempo where
     grauToRad:: Float -> Float
     grauToRad x = x * pi / 180
     
+    doIntersect :: Coor -> Coor -> Coor -> Coor -> Bool
+    doIntersect p1 q1 p2 q2 = isJust pInt
+        where 
+            pInt = intersectSegSeg p1 q1 p2 q2

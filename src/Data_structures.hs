@@ -50,8 +50,3 @@ module Data_structures where
                         | v < min = normalize min max (v + max - min)
                         | otherwise = v
 
-
-    doIntersect :: Coor -> Coor -> Coor -> Coor -> Bool
-    doIntersect p1 q1 p2 q2 = isJust pInt
-        where 
-            pInt = intersectSegSeg p1 q1 p2 q2
