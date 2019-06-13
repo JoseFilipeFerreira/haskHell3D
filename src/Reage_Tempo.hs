@@ -5,13 +5,11 @@ Description : Module react time haskHell 3D
 module Reage_Tempo where
 
     import Data_structures
+    import Constantes
     import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
     import Graphics.Gloss.Data.Color
     import Graphics.Gloss.Geometry.Line
     import Data.Maybe
-
-    walkSpeed :: Float
-    walkSpeed = 3
 
     -- * Reagir a Tempo
     -- | Função que altera o 'Estado' do jogo com base no tempo que passou 
