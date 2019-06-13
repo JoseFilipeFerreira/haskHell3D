@@ -66,7 +66,7 @@ module Main where
     -- | Função que devolve uma Picture a partir de um Estado.
     estadoInicial :: IO Estado
     estadoInicial = do  
-                        let defaultPlayer = Player (0,0) 0 0
+                        let defaultPlayer = Player 0 0
                         let defaultAction = Actions False False False False False
                         return Estado { mapa = testMap
                                       , player = defaultPlayer
