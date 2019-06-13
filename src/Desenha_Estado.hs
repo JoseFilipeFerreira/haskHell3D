@@ -11,17 +11,14 @@ import           Graphics.Gloss.Data.Picture          -- importar o tipo Picture
 import           Graphics.Gloss.Data.Color
 import           Data.List
 import           Data.Ord
-import           Data.Geometry.Polygon
-import           Data.Geometry.Point
-import qualified Data.CircularSeq as C
-import           Data.Ext
+import           Data.Maybe
 
 -- * Desenhar um 'Estado'
 -- | Função responsável por desenhar o jogo.
 desenhaEstado :: Estado -> Picture
-desenhaEstado e =  Scale 20 20 $ Pictures[drawnWalls, drawnPlayer e, Line viewBox]
+desenhaEstado e = Rotate (-90) $ Scale 20 20 $ Pictures[drawnWalls, drawnPlayer e, Line viewBox]
     where
-        drawnWalls = Pictures $ map drawWall $ filterOutsideWalls $ mapa e
+        drawnWalls = Pictures $ map drawWall $ filterWalls $ mapa e
     
 drawnPlayer :: Estado -> Picture
 drawnPlayer e = Rotate (90) $ color red $ Polygon[(0.5,-0.5),(-0.5,-0.5),(0,0.5)]
@@ -29,30 +26,15 @@ drawnPlayer e = Rotate (90) $ color red $ Polygon[(0.5,-0.5),(-0.5,-0.5),(0,0.5)
 drawWall :: Wall -> Picture
 drawWall (Wall p1 p2 col) = color col $ Line[p1, p2]
 
+filterWalls :: [Wall] -> [Wall]
+filterWalls = filter (isJust . instersectWall)
 
-filterOutsideWalls:: [Wall] -> [Wall]
-filterOutsideWalls = filter (isInsideWall) 
+instersectWall:: Wall -> Maybe Wall
+instersectWall wall@(Wall (x1, y1) (x2, y2) cor) | outsidePlaneX = Nothing
+                                                 | otherwise     = Just wall
     where
-        isInsideWall:: Wall -> Bool
-        isInsideWall (Wall (x1, y1) (x2, y2) _) = insidePolygon (point2 x1 y1) viewBoxPoly
-                                               || insidePolygon (point2 x2 y2) viewBoxPoly
-
-viewBoxPoly :: SimplePolygon () Float
-viewBoxPoly = SimplePolygon . C.fromList . map ext $ [ point2 pn1x pn1y
-                                                     , point2 pn2x pn2y
-                                                     , point2 pf2x pf2y
-                                                     , point2 pf1x pf1y
-                                                     , point2 pn1x pn1y
-                                                     ]
-    where
-        pn1x = nearPlane
-        pn1y = nearPlane * tan (grauToRad $ -viewAngle/2)
-        pn2x = nearPlane
-        pn2y = nearPlane * tan (grauToRad $  viewAngle/2)
-        pf1x = farPlane
-        pf1y = farPlane  * tan (grauToRad $ -viewAngle/2)
-        pf2x = farPlane 
-        pf2y = farPlane  * tan (grauToRad $  viewAngle/2) 
+        outsidePlaneX = (x1 > farPlane || x1 < nearPlane)
+                     && (x2 > farPlane || x2 < nearPlane)
 
 viewBox :: [(Coor)]
 viewBox = [pn1, pn2, pf2, pf1, pn1]
