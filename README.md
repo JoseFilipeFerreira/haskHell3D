@@ -6,8 +6,7 @@ as Doom to simulate 3D programmed in Haskell and Gloss
 ## Getting Started
 ### Setting up
 
-* Make sure you have [Gloss](http://hackage.haskell.org/package/gloss) and [Data.Geometry.Polygon](https://hackage.haskell.org/package/hgeometry-0.7.0.0/docs/Data-Geometry-Polygon.html) installed
-
+* Make sure you have [Gloss](http://hackage.haskell.org/package/gloss) installed.
 ```
 cd src && sh build.sh
 ```
@@ -15,7 +14,6 @@ cd src && sh build.sh
 ## Dependency
 
 * [Haskell-Gloss](http://hackage.haskell.org/package/gloss)
-* [Data.Geometry.Polygon](https://hackage.haskell.org/package/hgeometry-0.7.0.0/docs/Data-Geometry-Polygon.html)
 
 ## License
 
