@@ -13,15 +13,12 @@ module Desenha_Estado where
     -- * Desenhar um 'Estado'
     -- | Função responsável por desenhar o jogo.
     desenhaEstado :: Estado -> Picture
-    desenhaEstado e = Pictures[
-        Translate 0 (-300) $ scale 0.1 0.1 $ text $ show (coor $ player e),
-        drawnWalls,
-        drawnPlayer e]
+    desenhaEstado e = Rotate (-90) $ Pictures[drawnWalls, drawnPlayer e]
         where
             drawnWalls = Pictures $ map drawWall (mapa e)
     
     drawnPlayer :: Estado -> Picture
-    drawnPlayer e = Translate xp yp $ Rotate a $ color red $ Scale 10 10 $ Polygon[(1,0),(-1,0),(0,1)]
+    drawnPlayer e = Translate xp yp $ Rotate (a + 90) $ color red $ Scale 10 10 $ Polygon[(1,0),(-1,0),(0,1)]
         where
             (xp, yp) = coor $ player e
             a = ang $ player e
