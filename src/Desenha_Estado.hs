@@ -18,9 +18,8 @@ desenhaEstado :: Estado -> Picture
 desenhaEstado e = Rotate (-90) $ Scale 20 20 $ Pictures[drawnWallsRed, drawWalls, drawnPlayer e, Line viewBox]
     where
         drawnWallsRed = Pictures $ map drawWall $ map (paintWall red) (mapa e)
-        filteredOutsideWalls = filterWalls $ mapa e
-
-        drawWalls = Pictures $ map drawWall $ filter (isWallVisible (mapa e)) filteredOutsideWalls 
+        filteredInvisibleWalls = filter (isWallVisible (mapa e)) (mapa e) 
+        drawWalls = Pictures $ map drawWall $ filterWalls filteredInvisibleWalls
 
 paintWall:: Color -> Wall -> Wall
 paintWall col (Wall p1 p2 _) = (Wall p1 p2 col)
@@ -95,7 +94,7 @@ isWallVisible walls w = any (id) $ map (isPointVisible filteredWalls) wallPoints
 
 
 getWallPoints:: Wall -> Float -> [Coor]
-getWallPoints (Wall p1 p2 _) points = tail $ init $ map (calcVec p1 vec step) [0..points]
+getWallPoints (Wall p1 p2 _) points = map (calcVec p1 vec step) [1..(points-1)]
     where
         step = (distCoor p1 p2) / points
         vec  = unitVetor p1 p2
