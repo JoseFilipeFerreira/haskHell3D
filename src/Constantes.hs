@@ -18,3 +18,6 @@ nearPlane = 0.1
 
 farPlane :: Float
 farPlane = 15
+
+precisionWallHidden :: Float
+precisionWallHidden = 20

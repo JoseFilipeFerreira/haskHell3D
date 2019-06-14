@@ -18,7 +18,7 @@ data Wall = Wall
                 { positionX :: Coor
                 , positionY :: Coor
                 , wColor     :: Color
-                }
+                } deriving (Show, Eq)
 
 type Coor = (Float, Float)
 
