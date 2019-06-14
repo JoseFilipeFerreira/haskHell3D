@@ -30,14 +30,25 @@ filterWalls :: [Wall] -> [Wall]
 filterWalls e = map fromJust $ filter isJust (map instersectWall e)
 
 instersectWall:: Wall -> Maybe Wall
-instersectWall wall@(Wall p1 p2 _) | wallOutside wall && insideViewBox = Just (Wall p1 p2 red)
-                                   | otherwise        = Just wall
+instersectWall wall@(Wall p1 p2 _) | wallOutside wall && insideViewBox = Nothing
+                                   | otherwise                         = Just (squashWall wall)
     where
-        insideViewBox = not $ any (isJust) [inter1, inter2, inter3, inter4]
+        insideViewBox = not $ any (isJust) options
+        options = [inter1, inter2, inter3, inter4]
         inter1 = intersectSegSeg p1 p2 (viewBox!!0) (viewBox!!1)
         inter2 = intersectSegSeg p1 p2 (viewBox!!1) (viewBox!!2)
         inter3 = intersectSegSeg p1 p2 (viewBox!!2) (viewBox!!3)
         inter4 = intersectSegSeg p1 p2 (viewBox!!3) (viewBox!!4)
+
+        squashWall :: Wall -> Wall
+        squashWall wall@(Wall p1 p2 col) | (pointOutside p1) && (pointOutside p2) = (Wall (closestOption p1) (closestOption p2) col)
+                                         | pointOutside p1 = (Wall (closestOption p1) p2 col)
+                                         | pointOutside p2 = (Wall p1 (closestOption p2) col) 
+                                         | otherwise       = wall
+
+        closestOption:: Coor -> Coor
+        closestOption p1 = head $ sortOn (distCoor p1) $ map fromJust (filter isJust options)
+
 
 wallOutside::Wall -> Bool
 wallOutside (Wall p1 p2 _) = (pointOutside p1) && (pointOutside p2)

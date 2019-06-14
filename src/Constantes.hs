@@ -17,4 +17,4 @@ nearPlane :: Float
 nearPlane = 0.1
 
 farPlane :: Float
-farPlane = 10
+farPlane = 15
