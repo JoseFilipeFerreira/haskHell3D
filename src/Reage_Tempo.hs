@@ -6,17 +6,14 @@ module Reage_Tempo where
 
 import Data_structures
 import Constantes
-import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
+import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 import Graphics.Gloss.Geometry.Line
 import Data.Maybe
 
--- * Reagir a Tempo
--- | Função que altera o 'Estado' do jogo com base no tempo que passou 
 reageTempo :: Float -> Estado -> Estado
 reageTempo tick e = rotateMap tick $ moveMap tick e
                   
-
 rotateMap:: Float -> Estado -> Estado
 rotateMap tick e = e{mapa = newMap}
                     where
