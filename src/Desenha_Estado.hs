@@ -7,14 +7,13 @@ module Desenha_Estado where
 import Data_structures
 import Constantes
 import Reage_Tempo
-import Graphics.Gloss.Data.Picture          -- importar o tipo Picture
+import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
+import Graphics.Gloss.Geometry.Line
 import Data.List
 import Data.Ord
 import Data.Maybe
-import Graphics.Gloss.Geometry.Line
--- * Desenhar um 'Estado'
--- | Função responsável por desenhar o jogo.
+
 desenhaEstado :: Estado -> Picture
 desenhaEstado e = Rotate (-90) $ Scale 20 20 $ Pictures[drawnWalls, drawnPlayer e, Line viewBox]
     where
