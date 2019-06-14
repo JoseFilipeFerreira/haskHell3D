@@ -31,6 +31,7 @@ filterWalls e = map fromJust $ filter isJust (map instersectWall e)
 
 instersectWall:: Wall -> Maybe Wall
 instersectWall wall@(Wall p1 p2 _) | wallOutside wall && insideViewBox = Nothing
+                                   | insideViewBox                     = Just wall
                                    | otherwise                         = Just (squashWall wall)
     where
         insideViewBox = not $ any (isJust) options
@@ -54,8 +55,10 @@ wallOutside::Wall -> Bool
 wallOutside (Wall p1 p2 _) = (pointOutside p1) && (pointOutside p2)
 
 pointOutside::Coor -> Bool
-pointOutside (x, y) = (x > farPlane || x < nearPlane)
-                  || ((y < decl1 * x + offset1) || (y > decl2 * x + offset2))
+pointOutside (x, y) = x >= farPlane
+                   || x <= nearPlane
+                   || (y <= decl1 * x + offset1)
+                   || (y >= decl2 * x + offset2)
     where
         decl1 = decl (viewBox!!3) (viewBox!!0)
         offset1 = offset (viewBox!!3) decl1

@@ -11,7 +11,7 @@ walkSpeed :: Float
 walkSpeed = 3
 
 viewAngle :: Float
-viewAngle = 120
+viewAngle = 90
 
 nearPlane :: Float
 nearPlane = 0.1
