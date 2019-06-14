@@ -32,7 +32,7 @@ filterWalls e = map fromJust $ filter isJust (map instersectWall e)
 instersectWall:: Wall -> Maybe Wall
 instersectWall wall@(Wall (x1, y1) (x2, y2) _) | outsidePlaneX  = Just (Wall (x1, y1) (x2, y2) yellow)
                                                | outsidePlaneY  = Just (Wall (x1, y1) (x2, y2) yellow)
-                                               | insideViewBox  = Just wall
+                                               | insideViewBox  = Just (Wall (x1, y1) (x2, y2) red)
                                                | otherwise      = Just wall
     where
         outsidePlaneX = (x1 > farPlane || x1 < nearPlane)
@@ -46,7 +46,7 @@ instersectWall wall@(Wall (x1, y1) (x2, y2) _) | outsidePlaneX  = Just (Wall (x1
         decl2 = decl (viewBox!!1) (viewBox!!2)
         offset2 = offset (viewBox!!1) decl2
 
-        insideViewBox = any (isJust) [inter1, inter2, inter3, inter4]
+        insideViewBox = not $ any (isJust) [inter1, inter2, inter3, inter4]
         inter1 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!0) (viewBox!!1)
         inter2 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!1) (viewBox!!2)
         inter3 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!2) (viewBox!!3)
