@@ -30,27 +30,29 @@ filterWalls :: [Wall] -> [Wall]
 filterWalls e = map fromJust $ filter isJust (map instersectWall e)
 
 instersectWall:: Wall -> Maybe Wall
-instersectWall wall@(Wall (x1, y1) (x2, y2) _) | outsidePlaneX  = Just (Wall (x1, y1) (x2, y2) yellow)
-                                               | outsidePlaneY  = Just (Wall (x1, y1) (x2, y2) yellow)
-                                               | insideViewBox  = Just (Wall (x1, y1) (x2, y2) red)
-                                               | otherwise      = Just wall
+instersectWall wall@(Wall p1 p2 _) | wallOutside wall && insideViewBox = Just (Wall p1 p2 red)
+                                   | otherwise        = Just wall
     where
-        outsidePlaneX = (x1 > farPlane || x1 < nearPlane)
-                     && (x2 > farPlane || x2 < nearPlane)
-        outsidePlaneY = (y1 < decl1 * x1 + offset1 && y2 < decl1 * x2 + offset1)
-                     || (y1 > decl2 * x1 + offset2 && y2 > decl2 * x2 + offset2)
+        insideViewBox = not $ any (isJust) [inter1, inter2, inter3, inter4]
+        inter1 = intersectSegSeg p1 p2 (viewBox!!0) (viewBox!!1)
+        inter2 = intersectSegSeg p1 p2 (viewBox!!1) (viewBox!!2)
+        inter3 = intersectSegSeg p1 p2 (viewBox!!2) (viewBox!!3)
+        inter4 = intersectSegSeg p1 p2 (viewBox!!3) (viewBox!!4)
 
+wallOutside::Wall -> Bool
+wallOutside (Wall p1 p2 _) = (pointOutside p1) && (pointOutside p2)
+
+pointOutside::Coor -> Bool
+pointOutside (x, y) = (x > farPlane || x < nearPlane)
+                  || ((y < decl1 * x + offset1) || (y > decl2 * x + offset2))
+    where
         decl1 = decl (viewBox!!3) (viewBox!!0)
         offset1 = offset (viewBox!!3) decl1
 
         decl2 = decl (viewBox!!1) (viewBox!!2)
         offset2 = offset (viewBox!!1) decl2
 
-        insideViewBox = not $ any (isJust) [inter1, inter2, inter3, inter4]
-        inter1 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!0) (viewBox!!1)
-        inter2 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!1) (viewBox!!2)
-        inter3 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!2) (viewBox!!3)
-        inter4 = intersectSegSeg (x1, y1) (x2, y2) (viewBox!!3) (viewBox!!4)
+
 
 decl:: Coor -> Coor -> Float
 decl (x1, y1) (x2, y2) = (y2 - y1) / (x2 - x1) 
