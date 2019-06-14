@@ -30,7 +30,6 @@ rotateWall angDegree (Wall (x1, y1) (x2, y2) cor) = (Wall p1n p2n cor)
         p1n = ((x1 * cos ang - y1 * sin ang), (y1 * cos ang + x1 * sin ang))
         p2n = ((x2 * cos ang - y2 * sin ang), (y2 * cos ang + x2 * sin ang))
 
-
 moveMap::Float -> Estado -> Estado
 moveMap tick e | length interPoints > 0 = e
                | otherwise              = e{mapa = map (moveWall vec) (mapa e)}
@@ -38,7 +37,6 @@ moveMap tick e | length interPoints > 0 = e
         vec = getVecTranslate tick e
         interPoints = filter isJust $ map (wallIntercept vec) (mapa e)
 
-    
 wallIntercept :: (Float, Float) -> Wall -> Maybe Coor
 wallIntercept (px, py) (Wall pi pf _) = intersectSegSeg (0,0) (-px, -py) pi pf
 
