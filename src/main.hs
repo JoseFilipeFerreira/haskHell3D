@@ -1,17 +1,15 @@
 {-|
-Module      : Tarefa5_2017li1g13
-Description : Módulo da Tarefa 5 para LI1 17/18
-
-Módulo para a realização da Tarefa 5 de LI1 em 2017/18.
+Module      : Main
+Description : Main Module in haskHell 3D
 -}
 module Main where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Interface.Pure.Game
 import Data.Ord
 import Data_structures
-import Reage_Tempo
-import Reage_Evento
-import Desenha_Estado
+import React_Time
+import React_Event
+import Draw_State
 
 main :: IO ()
 main = do inicio <- initialState
@@ -23,9 +21,9 @@ joga inicio = play
         (greyN 0.8)
         30
         inicio
-        desenhaEstado
-        reageEvento
-        reageTempo
+        drawState
+        reactEvent
+        reactTime
 
 initialState :: IO Estado
 initialState = do  

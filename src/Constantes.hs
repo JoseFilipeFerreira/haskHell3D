@@ -1,5 +1,5 @@
 {-|
-Module      : Data_structures
+Module      : Constantes
 Description : Module containig all data structures for haskHell 3D
 -}
 module Constantes where

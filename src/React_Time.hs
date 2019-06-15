@@ -1,8 +1,8 @@
 {-|
-Module      : Reage_Tempo
+Module      : React_Time
 Description : Module react time haskHell 3D
 -}
-module Reage_Tempo where
+module React_Time where
 
 import Data_structures
 import Constantes
@@ -10,8 +10,8 @@ import Utils
 import Graphics.Gloss.Data.Color
 import Data.Maybe
 
-reageTempo :: Float -> Estado -> Estado
-reageTempo tick e = rotateMap tick $ moveMap tick e
+reactTime :: Float -> Estado -> Estado
+reactTime tick e = rotateMap tick $ moveMap tick e
                   
 rotateMap:: Float -> Estado -> Estado
 rotateMap tick e = e{mapa = newMap}
@@ -42,7 +42,8 @@ getVecTranslate tick e | walkL $ actions e    = (0    , -dist)
                   where
                     dist = tick * walkSpeed
 
-moveWall:: (Float, Float) -> Wall -> Wall
+-- | Translate a Wall by a given Vector
+moveWall:: Vector -> Wall -> Wall
 moveWall (x, y) (Wall (x1, y1) (x2, y2) cor) = (Wall p1n p2n cor)
     where
         p1n = (x1 + x, y1 + y)
