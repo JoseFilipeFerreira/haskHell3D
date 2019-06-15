@@ -27,15 +27,23 @@ joga inicio = play
 
 initialState :: IO Estado
 initialState = do  
-                let defaultPlayer = Player 0
+                let defaultPlayer = Player 0 10
                 let defaultAction = Actions False False False False False
                 return Estado { mapa = testMap
+                              , enemies = testEnemies
                               , player = defaultPlayer
                               , actions = defaultAction
                               , winSize = (0,0)                                  
                               }
 
-testMap::[Wall]
+testEnemies::Enemies
+testEnemies = [ Enemy (5,12) (6,12) 10
+              , Enemy (11,12) (12,12) 10
+              , Enemy (16,10) (16,9) 10
+              , Enemy (14,6)  (13,6) 10
+              ]
+
+testMap::Mapa
 testMap = [ Wall (-1,-1) (-1,6)  black
           , Wall (-1,-1) (10,-1) black
           , Wall (10,-1) (10,1) black
