@@ -1,8 +1,8 @@
 {-|
-Module      : Desenha_Estado
+Module      : Draw_State
 Description : Module draw state haskHell 3D
 -}
-module Desenha_Estado where
+module Draw_State where
 
 import Data_structures
 import Constantes
@@ -14,24 +14,29 @@ import Data.List
 import Data.Ord
 import Data.Maybe
 
-desenhaEstado :: Estado -> Picture
-desenhaEstado e = Rotate (-90) $ Scale 20 20 $ Pictures[drawMap2DRed (mapa e), drawMap2D (mapa e), drawnPlayer e, Line viewBox]
+-- | Draw the current State
+drawState :: Estado -> Picture
+drawState e = Rotate (-90) $ Scale 20 20 $ Pictures[drawMap2DRed (mapa e), drawMap2D (mapa e), drawnPlayer2D e, Line viewBox]
 
+-- | Draw the finalMap Map in 2D
 drawMap2D:: Mapa -> Picture
 drawMap2D  = Pictures . (map drawWall2D) . getFinalMap
 
+-- | Draw a given Map in red
 drawMap2DRed::Mapa -> Picture
 drawMap2DRed = Pictures . (map drawWall2D) . (map (paintWall red))
 
-paintWall:: Color -> Wall -> Wall
-paintWall col (Wall p1 p2 _) = (Wall p1 p2 col)
-
-drawnPlayer :: Estado -> Picture
-drawnPlayer e = Rotate (90) $ color red $ Polygon[(0.5,-0.5),(-0.5,-0.5),(0,0.5)]
-
+-- | Draw a given Wall in 2D
 drawWall2D :: Wall -> Picture
 drawWall2D (Wall p1 p2 col) = color col $ Line[p1, p2]
 
+-- | Changes the color of a given Wall to a given Color
+paintWall:: Color -> Wall -> Wall
+paintWall col (Wall p1 p2 _) = (Wall p1 p2 col)
+
+-- | draws the player in 2D
+drawnPlayer2D :: Estado -> Picture
+drawnPlayer2D e = Rotate (90) $ color red $ Polygon[(0.5,-0.5),(-0.5,-0.5),(0,0.5)]
 
 -- | Draws the aim in the screen
 target:: Color -> Float -> Picture
