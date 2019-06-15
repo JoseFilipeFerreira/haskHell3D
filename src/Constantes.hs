@@ -21,3 +21,6 @@ farPlane = 15
 
 precisionWallHidden :: Float
 precisionWallHidden = 20
+
+precisionWallDist :: Float
+precisionWallDist = 20
