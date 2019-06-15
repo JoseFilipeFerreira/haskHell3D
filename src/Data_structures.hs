@@ -15,16 +15,27 @@ type Vector = (Float, Float)
 
 -- | Define wall as the end points and it's color
 data Wall = Wall
-                { p1     :: Coor
-                , p2     :: Coor
+                { p1W    :: Coor
+                , p2W    :: Coor
                 , wColor :: Color
                 } deriving (Show, Eq)
 
 -- | Define a map as a list of Walls
 type Mapa = [Wall]
 
+-- | Define  enemy as the end points and it's HP
+data Enemy = Enemy
+                { p1E  :: Coor
+                , p2E  :: Coor
+                , hpE  :: Int
+                } deriving (Show, Eq)
+
+-- | Define Enemies as a list os Enemy
+type Enemies = [Enemy] 
+
 data Estado = Estado
                 { mapa     :: Mapa
+                , enemies  :: Enemies
                 , player   :: Player
                 , actions  :: Actions
                 , winSize  :: (Int, Int)
@@ -33,6 +44,7 @@ data Estado = Estado
 -- | Attributes of a Player
 data Player = Player
                 { xMove :: Float
+                , hpP   :: Int
                 }
 
 -- | Actions a Player can perform
