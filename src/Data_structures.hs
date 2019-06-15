@@ -7,10 +7,20 @@ module Data_structures where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
+-- | Coordinates of a point
 type Coor = (Float, Float)
 
+-- | Coordinates of a vector
 type Vector = (Float, Float)
 
+-- | Define wall as the end points and it's color
+data Wall = Wall
+                { p1     :: Coor
+                , p2     :: Coor
+                , wColor :: Color
+                } deriving (Show, Eq)
+
+-- | Define a map as a list of Walls
 type Mapa = [Wall]
 
 data Estado = Estado
@@ -20,17 +30,12 @@ data Estado = Estado
                 , winSize  :: (Int, Int)
                 }
 
-data Wall = Wall
-                { p1     :: Coor
-                , p2     :: Coor
-                , wColor :: Color
-                } deriving (Show, Eq)
-
-
+-- | Attributes of a Player
 data Player = Player
                 { xMove :: Float
                 }
 
+-- | Actions a Player can perform
 data Actions = Actions
                 { walk     :: Bool
                 , moonWalk :: Bool
@@ -39,11 +44,9 @@ data Actions = Actions
                 , shoot    :: Bool
                 }
 
+-- | Images used in the game
 data Images = Images
                 { caca :: Picture
                 , coco :: Picture
                 }
-    
-distCoor:: Coor -> Coor -> Float
-distCoor (x0, y0) (x1, y1) = sqrt((x1 - x0)^2 + (y1 - y0)^2)
 

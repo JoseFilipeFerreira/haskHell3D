@@ -6,9 +6,8 @@ module Reage_Tempo where
 
 import Data_structures
 import Constantes
-import Graphics.Gloss.Data.Picture
+import Utils
 import Graphics.Gloss.Data.Color
-import Graphics.Gloss.Geometry.Line
 import Data.Maybe
 
 reageTempo :: Float -> Estado -> Estado
@@ -34,9 +33,6 @@ moveMap tick e | length interPoints > 0 = e
         (vecx, vecy) = getVecTranslate tick e
         interPoints = filter isJust $ map (wallIntercept (-vecx, -vecy)) (mapa e)
 
-wallIntercept :: (Float, Float) -> Wall -> Maybe Coor
-wallIntercept (px, py) (Wall pi pf _) = intersectSegSeg (0,0) (px, py) pi pf
-
 getVecTranslate::Float -> Estado -> (Float, Float)
 getVecTranslate tick e | walkL $ actions e    = (0    , -dist)
                        | walkR $ actions e    = (0    ,  dist)
@@ -51,12 +47,3 @@ moveWall (x, y) (Wall (x1, y1) (x2, y2) cor) = (Wall p1n p2n cor)
     where
         p1n = (x1 + x, y1 + y)
         p2n = (x2 + x, y2 + y)
-
-vetAngToCoor:: (Float, Float) -> Coor
-vetAngToCoor (a,n) = (x, y)
-            where
-                x = n * cos   (grauToRad a)
-                y = - n * sin (grauToRad a)
-
-grauToRad:: Float -> Float
-grauToRad x = x * pi / 180
