@@ -6,7 +6,7 @@ module Map_Filter where
 
 import Data_structures
 import Constantes
-import Graphics.Gloss.Data.Color
+import Utils
 import Graphics.Gloss.Geometry.Line
 import Data.List
 import Data.Ord
@@ -21,7 +21,7 @@ viewBox = [pn1, pn2, pf2, pf1, pn1]
         pf1 = (farPlane , farPlane  * tan (grauToRad $ -viewAngle/2))
         pf2 = (farPlane , farPlane  * tan (grauToRad $  viewAngle/2)) 
 
-
+-- | Get the final map with only the visible walls sorted from the farthest to the closest
 getFinalMap:: Mapa -> Mapa
 getFinalMap = reverse . (sortOn distWall) .filterUselessWalls
 
@@ -96,13 +96,6 @@ getWallPoints (Wall p1 p2 _) points = map (calcVec p1 vec step) [0..(points)]
 
         calcVec :: Coor -> Coor -> Float -> Float -> Coor
         calcVec (x, y) (vx, vy) f n = (x + vx * f * n, y + vy * f * n)
-
--- | Calculate the unit vector that goes from point a to point b
-unitVetor:: Coor -> Coor -> Vector
-unitVetor (x1, y1) (x2, y2) = ((x / bot), (y / bot)) 
-    where
-        (x, y) = (x2 - x1, y2 - y1)
-        bot = sqrt(x^2 + y^2)
 
 -- | Calculate the distance to a given Wall
 distWall:: Wall -> Float

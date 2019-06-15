@@ -6,8 +6,7 @@ module Reage_Evento where
 
 import Data_structures
 import Constantes
-import Graphics.Gloss.Data.Picture
-import Graphics.Gloss.Data.Color
+import Utils
 import Graphics.Gloss.Interface.Pure.Game
 
 

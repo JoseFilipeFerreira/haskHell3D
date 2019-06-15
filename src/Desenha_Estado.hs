@@ -6,11 +6,10 @@ module Desenha_Estado where
 
 import Data_structures
 import Constantes
-import Reage_Tempo
 import Map_Filter
+import Utils
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
-import Graphics.Gloss.Geometry.Line
 import Data.List
 import Data.Ord
 import Data.Maybe
