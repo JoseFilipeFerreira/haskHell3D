@@ -7,20 +7,25 @@ module Data_structures where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
+type Coor = (Float, Float)
+
+type Vector = (Float, Float)
+
+type Mapa = [Wall]
+
 data Estado = Estado
-                { mapa     :: [Wall]
+                { mapa     :: Mapa
                 , player   :: Player
                 , actions  :: Actions
                 , winSize  :: (Int, Int)
                 }
 
 data Wall = Wall
-                { positionX :: Coor
-                , positionY :: Coor
-                , wColor     :: Color
+                { p1     :: Coor
+                , p2     :: Coor
+                , wColor :: Color
                 } deriving (Show, Eq)
 
-type Coor = (Float, Float)
 
 data Player = Player
                 { xMove :: Float
