@@ -10,6 +10,16 @@ import Graphics.Gloss.Geometry.Line
 -- | Calculate the point a given vector intersects a given Wall. Returns Nothing if it doesn't intercept.
 wallIntercept :: Vector -> Wall -> Maybe Coor
 wallIntercept (px, py) (Wall pi pf _) = intersectSegSeg (0,0) (px, py) pi pf
+ 
+-- | Calculate the point a given vector intersects a given Enemy. Returns Nothing if it doesn't intercept.
+enemyIntercept :: Vector -> Enemy -> Maybe Coor
+enemyIntercept (px, py) (Enemy pi pf _) = intersectSegSeg (0,0) (px, py) pi pf
+
+unitVetorVec:: Vector -> Vector
+unitVetorVec (0,0) = (0, 0) 
+unitVetorVec (x,y) = ((x / bot), (y / bot)) 
+    where
+        bot = sqrt(x^2 + y^2)
 
 -- | Calculate the unit vector that goes from point a to point b
 unitVetor:: Coor -> Coor -> Vector
@@ -21,6 +31,13 @@ unitVetor (x1, y1) (x2, y2) = ((x / bot), (y / bot))
 -- | Calculate the distance between two points
 distCoor:: Coor -> Coor -> Float
 distCoor (x0, y0) (x1, y1) = sqrt((x1 - x0)^2 + (y1 - y0)^2)
+
+sumVec:: [Vector] -> Vector
+sumVec [] = (0,0)
+sumVec [v] = v
+sumVec ((x,y):t) = (x + tx, y + ty)
+    where
+        (tx, ty) = sumVec t
 
 -- | Convert Angular vector(?) to cartesian vector (?)
 vetAngToCoor:: (Float, Float) -> Vector

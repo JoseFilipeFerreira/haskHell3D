@@ -40,7 +40,7 @@ testEnemies::Enemies
 testEnemies = [ Enemy (5,12) (6,12) 10
               , Enemy (11,12) (12,12) 10
               , Enemy (16,10) (16,9) 10
-              , Enemy (14,6)  (13,6) 10
+              , Enemy (14,4)  (14,5) 10
               ]
 
 testMap::Mapa
