@@ -28,6 +28,7 @@ data Enemy = Enemy
                 { p1E  :: Coor
                 , p2E  :: Coor
                 , hpE  :: Int
+                , dpsE :: Int
                 } deriving (Show, Eq)
 
 -- | Define Enemies as a list os Enemy

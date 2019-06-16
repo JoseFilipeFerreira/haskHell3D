@@ -27,10 +27,12 @@ filterOutsideViewBoxEnemy e = map fromJust $ filter isJust (map instersectEnemy 
 
 -- | Intersect a given enemy with the viewBox, returns Nothing if it is outside.
 instersectEnemy:: Enemy -> Maybe Enemy
-instersectEnemy enemy@(Enemy p1 p2 _) | enemyOutside enemy && insideViewBox = Nothing
-                                      | insideViewBox                       = Just enemy
-                                      | otherwise                           = Just (squashEnemy enemy)
+instersectEnemy e | enemyOutside e && insideViewBox = Nothing
+                  | insideViewBox                   = Just e
+                  | otherwise                       = Just (squashEnemy e)
     where
+        p1 = p1E e
+        p2 = p2E e
         insideViewBox = not $ any (isJust) options
         options = [inter1, inter2, inter3, inter4]
         inter1 = intersectSegSeg p1 p2 (viewBox!!0) (viewBox!!1)
@@ -39,17 +41,17 @@ instersectEnemy enemy@(Enemy p1 p2 _) | enemyOutside enemy && insideViewBox = No
         inter4 = intersectSegSeg p1 p2 (viewBox!!3) (viewBox!!4)
 
         squashEnemy :: Enemy -> Enemy
-        squashEnemy enemy@(Enemy p1 p2 hp) | (pointOutside p1) && (pointOutside p2) = (Enemy (closestOption p1) (closestOption p2) hp)
-                                           | pointOutside p1 = (Enemy (closestOption p1) p2 hp)
-                                           | pointOutside p2 = (Enemy p1 (closestOption p2) hp) 
-                                           | otherwise       = enemy
+        squashEnemy e | (pointOutside p1) && (pointOutside p2) = e{p1E = closestOption p1, p2E = closestOption p2}
+                      | pointOutside p1 = e{p1E = closestOption p1}
+                      | pointOutside p2 = e{p2E = closestOption p2}
+                      | otherwise       = e
 
         closestOption:: Coor -> Coor
         closestOption p1 = head $ sortOn (distCoor p1) $ map fromJust (filter isJust options)
 
 -- | Check if both end points of a given enemy are outside the viewBox 
 enemyOutside::Enemy -> Bool
-enemyOutside (Enemy p1 p2 _) = (pointOutside p1) && (pointOutside p2)
+enemyOutside e = (pointOutside (p1E e)) && (pointOutside (p2E e))
 
 -- | Checks if a enemy is visible from the perspective of the player
 isEnemyVisible:: Mapa -> Enemy -> Bool
@@ -61,8 +63,10 @@ isEnemyVisible walls e = any (id) $ map (isPointVisible walls) enemyPoints
 
 -- | Get N points along a given Enemy
 getEnemyPoints:: Enemy -> Float -> [Coor]
-getEnemyPoints (Enemy p1 p2 _) points = map (calcVec p1 vec step) [0..(points)]
+getEnemyPoints e points = map (calcVec p1 vec step) [0..(points)]
     where
+        p1 = p1E e
+        p2 = p2E e
         step = (distCoor p1 p2) / points
         vec  = unitVetor p1 p2
 

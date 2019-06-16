@@ -37,10 +37,10 @@ initialState = do
                               }
 
 testEnemies::Enemies
-testEnemies = [ Enemy (5,12) (6,12) 10
-              , Enemy (11,12) (12,12) 10
-              , Enemy (16,10) (16,9) 10
-              , Enemy (14,4)  (14,5) 10
+testEnemies = [ Enemy (5,12) (6,12) 10 1
+              , Enemy (11,12) (12,12) 10 1
+              , Enemy (16,10) (16,9) 10 1
+              , Enemy (14,4)  (14,5) 10 1
               ]
 
 testMap::Mapa
