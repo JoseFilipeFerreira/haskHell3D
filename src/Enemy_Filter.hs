@@ -53,11 +53,3 @@ instersectEnemy e | enemyOutside e && insideViewBox = Nothing
 enemyOutside::Enemy -> Bool
 enemyOutside e = (pointOutside (p1E e)) && (pointOutside (p2E e))
 
--- | Checks if a enemy is visible from the perspective of the player
-isEnemyVisible:: Mapa -> Enemy -> Bool
-isEnemyVisible walls e = any (id) $ map (isPointVisible walls) enemyPoints
-    where
-        enemyPoints = init $ tail $ getEnemyPoints e precisionWallHidden
-        isPointVisible:: [Wall] -> Coor -> Bool
-        isPointVisible w p = not $ any isJust $ map (wallIntercept p) w
-

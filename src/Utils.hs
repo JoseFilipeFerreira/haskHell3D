@@ -22,21 +22,46 @@ viewBox = [pn1, pn2, pf2, pf1, pn1]
 wallIntercept :: Vector -> Wall -> Maybe Coor
 wallIntercept v w = intersectSegSeg (0,0) v (p1W w) (p2W w)
 
--- | Calculate the distance to a given Enemy
-distEnemy:: Enemy -> Float
-distEnemy = minimum . (map (distCoor (0,0))) . (flip getEnemyPoints precisionEnemyDist)
-
 -- | Calculate the point a given vector intersects a given Enemy. Returns Nothing if it doesn't intercept.
 enemyIntercept :: Vector -> Enemy -> Bool
 enemyIntercept v e = isJust $ intersectSegSeg (0,0) v (p1E e) (p2E e)
 
+-- | Calculate the distance to a given Wall
+distWall:: Wall -> Float
+distWall = minimum . (map (distCoor (0,0))) . (flip getWallPoints precisionWallDist)
+
+-- | Calculate the distance to a given Enemy
+distEnemy:: Enemy -> Float
+distEnemy = minimum . (map (distCoor (0,0))) . (flip getEnemyPoints precisionEnemyDist)
+
+-- | Checks if a wall is visible from the perspective of the player
+isWallVisible:: Mapa -> Wall -> Bool
+isWallVisible walls w = any (id) $ map (isPointVisible filteredWalls) wallPoints
+    where
+        wallPoints = init $ tail $ getWallPoints w precisionWallHidden
+        filteredWalls = filter (/=w) walls
+
+-- | Checks if a enemy is visible from the perspective of the player
+isEnemyVisible:: Mapa -> Enemy -> Bool
+isEnemyVisible walls e = any (id) $ map (isPointVisible walls) $ init $ tail $ getEnemyPoints e precisionWallHidden
+
+-- | Checks if a point is visible
+isPointVisible:: [Wall] -> Coor -> Bool
+isPointVisible w p = not $ any isJust $ map (wallIntercept p) w
+
+-- | Get N points along a given Wall
+getWallPoints:: Wall -> Float -> [Coor]
+getWallPoints w nP = getLinePoints (p1W w) (p2W w) nP
+
 -- | Get N points along a given Enemy
 getEnemyPoints:: Enemy -> Float -> [Coor]
-getEnemyPoints e points = map (calcVec p1 vec step) [0..(points)]
+getEnemyPoints e nP = getLinePoints (p1E e) (p2E e) nP 
+
+-- | Get N points between two coordinates
+getLinePoints:: Coor -> Coor -> Float -> [Coor]
+getLinePoints p1 p2 nP = map (calcVec p1 vec step) [0..nP]
     where
-        p1 = p1E e
-        p2 = p2E e
-        step = (distCoor p1 p2) / points
+        step = (distCoor p1 p2) / nP
         vec  = unitVetor p1 p2
 
         calcVec :: Coor -> Coor -> Float -> Float -> Coor
@@ -63,9 +88,8 @@ pointOutside (x, y) = x >= farPlane
                   || (y >= decl2 * x + offset2)
     where
         decl1 = decl (viewBox!!3) (viewBox!!0)
-        offset1 = offset (viewBox!!3) decl1
-
         decl2 = decl (viewBox!!1) (viewBox!!2)
+        offset1 = offset (viewBox!!3) decl1
         offset2 = offset (viewBox!!1) decl2
 
         decl:: Coor -> Coor -> Float  
@@ -84,6 +108,16 @@ sumVec [] = (0,0)
 sumVec ((x,y):t) = (x + tx, y + ty)
     where
         (tx, ty) = sumVec t
+
+-- | Rotates a given point by the given degrees
+rotatePoint:: Float -> Coor -> Coor
+rotatePoint angDegre (x,y) = ((x * cos ang - y * sin ang), (y * cos ang + x * sin ang))
+    where
+        ang = grauToRad angDegre
+
+-- | Move a given point by a given vector
+movePoint:: Vector -> Coor -> Coor
+movePoint (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
 
 -- | Convert Angular vector(?) to cartesian vector (?)
 vetAngToCoor:: (Float, Float) -> Vector

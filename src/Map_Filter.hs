@@ -52,27 +52,3 @@ instersectWall w | wallOutside w && insideViewBox = Nothing
 wallOutside::Wall -> Bool
 wallOutside w = pointOutside (p1W w) && pointOutside (p2W w)
 
--- | Checks if a wall is visible from the perspective of the player
-isWallVisible:: Mapa -> Wall -> Bool
-isWallVisible walls w = any (id) $ map (isPointVisible filteredWalls) wallPoints
-    where
-        wallPoints = init $ tail $ getWallPoints w precisionWallHidden
-        filteredWalls = filter (/=w) walls
-        isPointVisible:: [Wall] -> Coor -> Bool
-        isPointVisible w p = not $ any isJust $ map (wallIntercept p) w
-
--- | Get N points along a given Wall
-getWallPoints:: Wall -> Float -> [Coor]
-getWallPoints w points = map (calcVec p1 vec step) [0..(points)]
-    where
-        p1 = p1W w
-        p2 = p2W w
-        step = (distCoor p1 p2) / points
-        vec  = unitVetor p1 p2
-
-        calcVec :: Coor -> Coor -> Float -> Float -> Coor
-        calcVec (x, y) (vx, vy) f n = (x + vx * f * n, y + vy * f * n)
-
--- | Calculate the distance to a given Wall
-distWall:: Wall -> Float
-distWall = minimum . (map (distCoor (0,0))) . (flip getWallPoints precisionWallDist)
