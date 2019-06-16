@@ -7,6 +7,10 @@ module Data_structures where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
+data MenuPos = MenuPlay
+             | MenuGameOver
+             deriving Eq
+
 -- | Coordinates of a point
 type Coor = (Float, Float)
 
@@ -25,10 +29,11 @@ type Mapa = [Wall]
 
 -- | Define  enemy as the end points and it's HP
 data Enemy = Enemy
-                { p1E  :: Coor
-                , p2E  :: Coor
-                , hpE  :: Int
-                , dpsE :: Int
+                { p1E    :: Coor
+                , p2E    :: Coor
+                , hpE    :: Int
+                , dpsE   :: Float
+                , rangeE :: Float
                 } deriving (Show, Eq)
 
 -- | Define Enemies as a list os Enemy
@@ -39,13 +44,14 @@ data Estado = Estado
                 , enemies  :: Enemies
                 , player   :: Player
                 , actions  :: Actions
+                , menu     :: MenuPos
                 , winSize  :: (Int, Int)
                 }
 
 -- | Attributes of a Player
 data Player = Player
-                { xMove :: Float
-                , hpP   :: Int
+                { xMove   :: Float
+                , hpP     :: Float
                 }
 
 -- | Actions a Player can perform

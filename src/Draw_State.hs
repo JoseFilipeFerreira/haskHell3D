@@ -17,7 +17,9 @@ import Data.Maybe
 
 -- | Draw the current State
 drawState :: Estado -> Picture
-drawState e = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
+drawState e = Pictures[ pla, Translate 0 (-300) $ scale 1 1 $ text $ show (hpP $ player e)] 
+    where
+        pla = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
                                                    , drawMap2D (mapa e)
                                                    , drawEnemies2DAll (enemies e)
                                                    , drawEnemies2D (mapa e) (enemies e)
