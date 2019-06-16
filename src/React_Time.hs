@@ -30,9 +30,11 @@ rotateMap tick e = e{mapa = newMap}
 
 -- | Rotate a given wall by the given degrees
 rotateWall::Float -> Wall -> Wall
-rotateWall angDegree (Wall (x1, y1) (x2, y2) cor) = (Wall p1n p2n cor)
+rotateWall angDegre w = w{p1W = p1n, p2W = p2n}
     where
-        ang = grauToRad angDegree 
+        (x1, y1) = p1W w
+        (x2, y2) = p2W w
+        ang = grauToRad angDegre
         p1n = ((x1 * cos ang - y1 * sin ang), (y1 * cos ang + x1 * sin ang))
         p2n = ((x2 * cos ang - y2 * sin ang), (y2 * cos ang + x2 * sin ang))
 
@@ -42,8 +44,10 @@ moveMap tick e = e{mapa = map (moveWall $ getVecTranslate tick e) (mapa e)}
 
 -- | Translate a Wall by a given Vector
 moveWall:: Vector -> Wall -> Wall
-moveWall (x, y) (Wall (x1, y1) (x2, y2) cor) = (Wall p1n p2n cor)
+moveWall (x, y) w = w{p1W = p1n, p2W = p2n}
     where
+        (x1, y1) = p1W w
+        (x2, y2) = p2W w
         p1n = (x1 + x, y1 + y)
         p2n = (x2 + x, y2 + y)
 
@@ -55,9 +59,11 @@ rotateEnemies tick e = e{enemies = map (rotateEnemy rX) (enemies e)}
 
 -- | Rotate a given enemy by the given degrees
 rotateEnemy::Float -> Enemy -> Enemy
-rotateEnemy angDegree (Enemy (x1, y1) (x2, y2) hp) = (Enemy p1n p2n hp)
+rotateEnemy angDegre e = e{p1E = p1n, p2E = p2n}
     where
-        ang = grauToRad angDegree 
+        (x1, y1) = p1E e
+        (x2, y2) = p2E e
+        ang = grauToRad angDegre 
         p1n = ((x1 * cos ang - y1 * sin ang), (y1 * cos ang + x1 * sin ang))
         p2n = ((x2 * cos ang - y2 * sin ang), (y2 * cos ang + x2 * sin ang))
 
@@ -67,8 +73,10 @@ moveEnemies tick e = e{enemies = map (moveEnemy $ getVecTranslate tick e) (enemi
 
 -- | Translate a Enemy by a given Vector
 moveEnemy:: Vector -> Enemy -> Enemy
-moveEnemy (x, y) (Enemy (x1, y1) (x2, y2) hp) = (Enemy p1n p2n hp)
+moveEnemy (x, y) e = e{p1E = p1n, p2E = p2n}
     where
+        (x1, y1) = p1E e
+        (x2, y2) = p2E e
         p1n = (x1 + x, y1 + y)
         p2n = (x2 + x, y2 + y)
 

@@ -35,7 +35,7 @@ drawMap2DAll = Pictures . (map drawWall2D) . (map (paintWall orange))
 
 -- | Draw a given Wall in 2D
 drawWall2D :: Wall -> Picture
-drawWall2D (Wall p1 p2 col) = color col $ Line[p1, p2]
+drawWall2D w = color (wColor w) $ Line[p1W w, p2W w]
 
 -- | Draw the final enemies
 drawEnemies2D :: Mapa ->  Enemies -> Picture
@@ -48,11 +48,11 @@ drawEnemies2DAll = Pictures . (map (drawEnemy2D green))
 
 -- | draw a given enemy in a given color
 drawEnemy2D :: Color -> Enemy -> Picture
-drawEnemy2D col (Enemy p1 p2 _) = color col $ Line[p1, p2]
+drawEnemy2D col e = color col $ Line[p1E e, p2E e]
 
 -- | Changes the color of a given Wall to a given Color
 paintWall:: Color -> Wall -> Wall
-paintWall col (Wall p1 p2 _) = (Wall p1 p2 col)
+paintWall col w = w {wColor = col}
 
 -- | draws the player in 2D
 drawnPlayer2D :: Estado -> Picture

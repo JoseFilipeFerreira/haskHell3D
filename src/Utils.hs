@@ -20,11 +20,11 @@ viewBox = [pn1, pn2, pf2, pf1, pn1]
 
 -- | Calculate the point a given vector intersects a given Wall. Returns Nothing if it doesn't intercept.
 wallIntercept :: Vector -> Wall -> Maybe Coor
-wallIntercept (px, py) (Wall pi pf _) = intersectSegSeg (0,0) (px, py) pi pf
+wallIntercept v w = intersectSegSeg (0,0) v (p1W w) (p2W w)
  
 -- | Calculate the point a given vector intersects a given Enemy. Returns Nothing if it doesn't intercept.
 enemyIntercept :: Vector -> Enemy -> Maybe Coor
-enemyIntercept (px, py) (Enemy pi pf _) = intersectSegSeg (0,0) (px, py) pi pf
+enemyIntercept v e = intersectSegSeg (0,0) v (p1E e) (p2E e)
 
 unitVetorVec:: Vector -> Vector
 unitVetorVec (0,0) = (0, 0) 
