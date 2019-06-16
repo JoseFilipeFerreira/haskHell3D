@@ -15,9 +15,16 @@ import Data.List
 import Data.Ord
 import Data.Maybe
 
--- | Draw the current State
 drawState :: Estado -> Picture
-drawState e = Pictures[ pla, Translate 0 (-300) $ scale 1 1 $ text $ show (hpP $ player e)] 
+drawState e | (menu e) == MenuPlay = drawStatePlay e
+            | otherwise = Translate (-200) 0 $ scale 1 1 $ text $ "Game Over"
+
+-- | Draw the current State
+drawStatePlay :: Estado -> Picture
+drawStatePlay e = Pictures[ pla
+                          , Translate 0 (-300) $ scale 0.1 0.1 $ text $ show (hpP $ player e)
+                          , Translate 0 (-315) $ scale 0.1 0.1 $ text $ show (ammo $ player e)
+                          ] 
     where
         pla = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
                                                    , drawMap2D (mapa e)

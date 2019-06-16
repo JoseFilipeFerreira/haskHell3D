@@ -7,12 +7,36 @@ module React_Time where
 import Data_structures
 import Constantes
 import Utils
+import Enemy_Filter
 import Graphics.Gloss.Data.Color
 import Data.Maybe
+import Data.List
 
 reactTime :: Float -> Estado -> Estado
-reactTime tick e | (menu e) == MenuPlay = enemyDps tick $ moveWorld tick e
+reactTime tick e | (menu e) == MenuPlay = shootEnemy tick $ enemyDps tick $ moveWorld tick e
                  | otherwise            = e
+
+shootEnemy :: Float -> Estado -> Estado
+shootEnemy tick e | shoot (actions e) && ammo (player e) > 0 = e{ actions = (actions e){shoot = False}
+                                                                , enemies = newEnemies
+                                                                , player = (player e){ammo = ammo (player e) - 1}
+                                                                }
+                  | otherwise                                = e
+    where
+        newEnemies = damagedEnemy
+                  ++ inLineInvisibleEnemies
+                  ++ outLineEnemies
+        (inLineEnemies, outLineEnemies) = partition (enemyIntercept (range(player e),0)) $ enemies e
+        (inLineVisibleEnemies, inLineInvisibleEnemies) = partition (isEnemyVisible (mapa e)) inLineEnemies
+        damagedEnemy = damageEnemy e $ sortOn distEnemy inLineVisibleEnemies
+        
+        damageEnemy :: Estado -> [Enemy] -> [Enemy]
+        damageEnemy _ [] = []
+        damageEnemy e (en:t) | newHP <= 0 = t
+                             | otherwise  = en{hpE = newHP}:t
+            where
+                newHP = (hpE en) - damage(player e)
+
 
 moveWorld:: Float -> Estado -> Estado
 moveWorld tick e | interWall || interEnemy = rotateEnemies tick $ rotateMap tick e
