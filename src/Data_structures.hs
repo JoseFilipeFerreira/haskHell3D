@@ -31,7 +31,7 @@ type Mapa = [Wall]
 data Enemy = Enemy
                 { p1E    :: Coor
                 , p2E    :: Coor
-                , hpE    :: Int
+                , hpE    :: Float
                 , dpsE   :: Float
                 , rangeE :: Float
                 } deriving (Show, Eq)
@@ -51,6 +51,9 @@ data Estado = Estado
 -- | Attributes of a Player
 data Player = Player
                 { xMove   :: Float
+                , range   :: Float
+                , ammo    :: Int
+                , damage  :: Float
                 , hpP     :: Float
                 }
 
