@@ -12,15 +12,6 @@ import Data.List
 import Data.Ord
 import Data.Maybe
 
--- | The area that is visible to the player
-viewBox :: [Coor]
-viewBox = [pn1, pn2, pf2, pf1, pn1]
-    where
-        pn1 = (nearPlane, nearPlane * tan (grauToRad $ -viewAngle/2))
-        pn2 = (nearPlane, nearPlane * tan (grauToRad $  viewAngle/2))
-        pf1 = (farPlane , farPlane  * tan (grauToRad $ -viewAngle/2))
-        pf2 = (farPlane , farPlane  * tan (grauToRad $  viewAngle/2)) 
-
 -- | Get the final map with only the visible walls sorted from the farthest to the closest
 getFinalMap:: Mapa -> Mapa
 getFinalMap = reverse . (sortOn distWall) .filterUselessWalls
@@ -58,25 +49,6 @@ instersectWall wall@(Wall p1 p2 _) | wallOutside wall && insideViewBox = Nothing
 -- | Check if both end points of a given wall are outside the viewBox 
 wallOutside::Wall -> Bool
 wallOutside (Wall p1 p2 _) = (pointOutside p1) && (pointOutside p2)
-
--- | Check if a point is outside the viewBox
-pointOutside::Coor -> Bool
-pointOutside (x, y) = x >= farPlane
-                  ||  x <= nearPlane
-                  || (y <= decl1 * x + offset1)
-                  || (y >= decl2 * x + offset2)
-    where
-        decl1 = decl (viewBox!!3) (viewBox!!0)
-        offset1 = offset (viewBox!!3) decl1
-
-        decl2 = decl (viewBox!!1) (viewBox!!2)
-        offset2 = offset (viewBox!!1) decl2
-
-        decl:: Coor -> Coor -> Float  
-        decl (x1, y1) (x2, y2) = (y2 - y1) / (x2 - x1) 
-
-        offset:: Coor -> Float -> Float
-        offset (x, y) m = y - m * x
 
 -- | Checks if a wall is visible from the perspective of the player
 isWallVisible:: Mapa -> Wall -> Bool

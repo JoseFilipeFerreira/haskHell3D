@@ -3,6 +3,7 @@ Module      : Constantes
 Description : Module containig all data structures for haskHell 3D
 -}
 module Constantes where
+import Data_structures
 
 -- | Speed the player rotates at when using the arrows
 arrowRotationSpeed :: Float
@@ -31,3 +32,12 @@ precisionWallHidden = 20
 -- | Number of points to calculate the distance to a wall
 precisionWallDist :: Float
 precisionWallDist = 20
+
+-- | Number of points to check if a wall is visible
+precisionEnemyHidden :: Float
+precisionEnemyHidden = 20
+
+-- | Number of points to calculate the distance to a wall
+precisionEnemyDist :: Float
+precisionEnemyDist = 20
+
