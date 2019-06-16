@@ -7,7 +7,7 @@ module Utils where
 import Constantes
 import Data_structures
 import Graphics.Gloss.Geometry.Line
-
+import Data.Maybe
 
 -- | Calculate the area that is visible to the player
 viewBox :: [Coor]
@@ -21,10 +21,26 @@ viewBox = [pn1, pn2, pf2, pf1, pn1]
 -- | Calculate the point a given vector intersects a given Wall. Returns Nothing if it doesn't intercept.
 wallIntercept :: Vector -> Wall -> Maybe Coor
 wallIntercept v w = intersectSegSeg (0,0) v (p1W w) (p2W w)
- 
+
+-- | Calculate the distance to a given Enemy
+distEnemy:: Enemy -> Float
+distEnemy = minimum . (map (distCoor (0,0))) . (flip getEnemyPoints precisionEnemyDist)
+
 -- | Calculate the point a given vector intersects a given Enemy. Returns Nothing if it doesn't intercept.
-enemyIntercept :: Vector -> Enemy -> Maybe Coor
-enemyIntercept v e = intersectSegSeg (0,0) v (p1E e) (p2E e)
+enemyIntercept :: Vector -> Enemy -> Bool
+enemyIntercept v e = isJust $ intersectSegSeg (0,0) v (p1E e) (p2E e)
+
+-- | Get N points along a given Enemy
+getEnemyPoints:: Enemy -> Float -> [Coor]
+getEnemyPoints e points = map (calcVec p1 vec step) [0..(points)]
+    where
+        p1 = p1E e
+        p2 = p2E e
+        step = (distCoor p1 p2) / points
+        vec  = unitVetor p1 p2
+
+        calcVec :: Coor -> Coor -> Float -> Float -> Coor
+        calcVec (x, y) (vx, vy) f n = (x + vx * f * n, y + vy * f * n)
 
 unitVetorVec:: Vector -> Vector
 unitVetorVec (0,0) = (0, 0) 

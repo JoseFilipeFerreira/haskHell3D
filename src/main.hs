@@ -29,18 +29,19 @@ initialState :: IO Estado
 initialState = do  
                 let defaultPlayer = Player 0 10
                 let defaultAction = Actions False False False False False
-                return Estado { mapa = testMap
+                return Estado { mapa    = testMap
                               , enemies = testEnemies
-                              , player = defaultPlayer
+                              , player  = defaultPlayer
                               , actions = defaultAction
+                              , menu    = MenuPlay
                               , winSize = (0,0)                                  
                               }
 
 testEnemies::Enemies
-testEnemies = [ Enemy (5,12) (6,12) 10 1
-              , Enemy (11,12) (12,12) 10 1
-              , Enemy (16,10) (16,9) 10 1
-              , Enemy (14,4)  (14,5) 10 1
+testEnemies = [ Enemy (5 ,12) (6,12 ) 10 1 0.3
+              , Enemy (11,12) (12,12) 10 1 0.3
+              , Enemy (16,10) (16,9 ) 10 1 0.3
+              , Enemy (14,4 ) (14,5 ) 10 1 0.3
               ]
 
 testMap::Mapa

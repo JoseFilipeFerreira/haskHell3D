@@ -61,18 +61,3 @@ isEnemyVisible walls e = any (id) $ map (isPointVisible walls) enemyPoints
         isPointVisible:: [Wall] -> Coor -> Bool
         isPointVisible w p = not $ any isJust $ map (wallIntercept p) w
 
--- | Get N points along a given Enemy
-getEnemyPoints:: Enemy -> Float -> [Coor]
-getEnemyPoints e points = map (calcVec p1 vec step) [0..(points)]
-    where
-        p1 = p1E e
-        p2 = p2E e
-        step = (distCoor p1 p2) / points
-        vec  = unitVetor p1 p2
-
-        calcVec :: Coor -> Coor -> Float -> Float -> Coor
-        calcVec (x, y) (vx, vy) f n = (x + vx * f * n, y + vy * f * n)
-
--- | Calculate the distance to a given Enemy
-distEnemy:: Enemy -> Float
-distEnemy = minimum . (map (distCoor (0,0))) . (flip getEnemyPoints precisionEnemyDist)

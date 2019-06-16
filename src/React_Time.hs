@@ -11,15 +11,28 @@ import Graphics.Gloss.Data.Color
 import Data.Maybe
 
 reactTime :: Float -> Estado -> Estado
-reactTime tick e = moveWorld tick e
+reactTime tick e | (menu e) == MenuPlay = enemyDps tick $ moveWorld tick e
+                 | otherwise            = e
 
 moveWorld:: Float -> Estado -> Estado
 moveWorld tick e | interWall || interEnemy = rotateEnemies tick $ rotateMap tick e
                  | otherwise               = rotateEnemies tick $ moveEnemies tick $ rotateMap tick $ moveMap tick e
     where
         (vx, vy) = getVecTranslate tick e
-        interWall  = any isJust $ map (wallIntercept  (-vx, -vy)) (mapa    e)
-        interEnemy = any isJust $ map (enemyIntercept (-vx, -vy)) (enemies e)
+        interWall  = any isJust $ map (wallIntercept  (-vx, -vy)) (mapa e)
+        interEnemy = length (filter (enemyIntercept (-vx, -vy)) (enemies e)) > 0
+        
+enemyDps :: Float -> Estado -> Estado
+enemyDps tick e | newHP <= 0 = e{player = (player e){hpP = 0}, menu = MenuGameOver}
+                | otherwise  = e{player = (player e){hpP = newHP}}
+    where
+        newHP = hpP (player e) - closeEnemiesDPS * tick
+        closeEnemiesDPS = sum $ map dpsE $ filter inRangeEnemy  (enemies e)
+
+        inRangeEnemy:: Enemy -> Bool
+        inRangeEnemy e = (distEnemy e) <= (rangeE e)
+
+        
 
 -- | Rotate all the walls in the map
 rotateMap:: Float -> Estado -> Estado
