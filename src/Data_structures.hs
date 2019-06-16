@@ -7,6 +7,17 @@ module Data_structures where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
+-- | Game state
+data Estado = Estado
+                { mapa     :: Mapa
+                , enemies  :: Enemies
+                , player   :: Player
+                , actions  :: Actions
+                , menu     :: MenuPos
+                , winSize  :: (Int, Int)
+                }
+
+-- | All menu positions
 data MenuPos = MenuPlay
              | MenuGameOver
              deriving Eq
@@ -38,15 +49,6 @@ data Enemy = Enemy
 
 -- | Define Enemies as a list os Enemy
 type Enemies = [Enemy] 
-
-data Estado = Estado
-                { mapa     :: Mapa
-                , enemies  :: Enemies
-                , player   :: Player
-                , actions  :: Actions
-                , menu     :: MenuPos
-                , winSize  :: (Int, Int)
-                }
 
 -- | Attributes of a Player
 data Player = Player

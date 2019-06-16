@@ -13,9 +13,10 @@ import Data.Maybe
 import Data.List
 
 reactTime :: Float -> Estado -> Estado
-reactTime tick e | (menu e) == MenuPlay = shootEnemy tick $ enemyDps tick $ moveWorld tick e
+reactTime tick e | (menu e) == MenuPlay = shootEnemy tick $ enemyDps tick $ moveWorld tick $ shootEnemy tick e
                  | otherwise            = e
 
+-- | Shoot a bullet
 shootEnemy :: Float -> Estado -> Estado
 shootEnemy tick e | shoot (actions e) && ammo (player e) > 0 = e{ actions = (actions e){shoot = False}
                                                                 , enemies = newEnemies
@@ -23,12 +24,10 @@ shootEnemy tick e | shoot (actions e) && ammo (player e) > 0 = e{ actions = (act
                                                                 }
                   | otherwise                                = e
     where
-        newEnemies = damagedEnemy
-                  ++ inLineInvisibleEnemies
-                  ++ outLineEnemies
-        (inLineEnemies, outLineEnemies) = partition (enemyIntercept (range(player e),0)) $ enemies e
-        (inLineVisibleEnemies, inLineInvisibleEnemies) = partition (isEnemyVisible (mapa e)) inLineEnemies
-        damagedEnemy = damageEnemy e $ sortOn distEnemy inLineVisibleEnemies
+        newEnemies = upEnemies ++ lineInvEn ++ outEn
+        (lineEn, outEn) = partition (enemyIntercept (range(player e),0)) $ enemies e
+        (lineVEn, lineInvEn) = partition (isEnemyVisible (mapa e)) lineEn
+        upEnemies = damageEnemy e $ sortOn distEnemy lineVEn
         
         damageEnemy :: Estado -> [Enemy] -> [Enemy]
         damageEnemy _ [] = []
@@ -37,7 +36,7 @@ shootEnemy tick e | shoot (actions e) && ammo (player e) > 0 = e{ actions = (act
             where
                 newHP = (hpE en) - damage(player e)
 
-
+-- | move the entire world
 moveWorld:: Float -> Estado -> Estado
 moveWorld tick e | interWall || interEnemy = rotateEnemies tick $ rotateMap tick e
                  | otherwise               = rotateEnemies tick $ moveEnemies tick $ rotateMap tick $ moveMap tick e
@@ -45,7 +44,8 @@ moveWorld tick e | interWall || interEnemy = rotateEnemies tick $ rotateMap tick
         (vx, vy) = getVecTranslate tick e
         interWall  = any isJust $ map (wallIntercept  (-vx, -vy)) (mapa e)
         interEnemy = length (filter (enemyIntercept (-vx, -vy)) (enemies e)) > 0
-        
+
+-- | Calculate all the damage from the enemies
 enemyDps :: Float -> Estado -> Estado
 enemyDps tick e | newHP <= 0 = e{player = (player e){hpP = 0}, menu = MenuGameOver}
                 | otherwise  = e{player = (player e){hpP = newHP}}
@@ -56,24 +56,13 @@ enemyDps tick e | newHP <= 0 = e{player = (player e){hpP = 0}, menu = MenuGameOv
         inRangeEnemy:: Enemy -> Bool
         inRangeEnemy e = (distEnemy e) <= (rangeE e)
 
-        
-
 -- | Rotate all the walls in the map
 rotateMap:: Float -> Estado -> Estado
-rotateMap tick e = e{mapa = newMap}
-                    where
-                      rX = tick * (xMove $ player e)
-                      newMap = map (rotateWall rX) (mapa e)
+rotateMap tick e = e{mapa = map (rotateWall (tick * (xMove $ player e))) (mapa e)}
 
 -- | Rotate a given wall by the given degrees
 rotateWall::Float -> Wall -> Wall
-rotateWall angDegre w = w{p1W = p1n, p2W = p2n}
-    where
-        (x1, y1) = p1W w
-        (x2, y2) = p2W w
-        ang = grauToRad angDegre
-        p1n = ((x1 * cos ang - y1 * sin ang), (y1 * cos ang + x1 * sin ang))
-        p2n = ((x2 * cos ang - y2 * sin ang), (y2 * cos ang + x2 * sin ang))
+rotateWall a w = w{p1W = rotatePoint a (p1W w), p2W = rotatePoint a (p2W w)}
 
 -- | Translate all walls
 moveMap::Float -> Estado -> Estado
@@ -81,12 +70,7 @@ moveMap tick e = e{mapa = map (moveWall $ getVecTranslate tick e) (mapa e)}
 
 -- | Translate a Wall by a given Vector
 moveWall:: Vector -> Wall -> Wall
-moveWall (x, y) w = w{p1W = p1n, p2W = p2n}
-    where
-        (x1, y1) = p1W w
-        (x2, y2) = p2W w
-        p1n = (x1 + x, y1 + y)
-        p2n = (x2 + x, y2 + y)
+moveWall v w = w{p1W = movePoint v (p1W w), p2W = movePoint v (p2W w)}
 
 -- | Rotate all the enemies in the state
 rotateEnemies:: Float -> Estado -> Estado
@@ -96,13 +80,7 @@ rotateEnemies tick e = e{enemies = map (rotateEnemy rX) (enemies e)}
 
 -- | Rotate a given enemy by the given degrees
 rotateEnemy::Float -> Enemy -> Enemy
-rotateEnemy angDegre e = e{p1E = p1n, p2E = p2n}
-    where
-        (x1, y1) = p1E e
-        (x2, y2) = p2E e
-        ang = grauToRad angDegre 
-        p1n = ((x1 * cos ang - y1 * sin ang), (y1 * cos ang + x1 * sin ang))
-        p2n = ((x2 * cos ang - y2 * sin ang), (y2 * cos ang + x2 * sin ang))
+rotateEnemy a e = e{p1E = rotatePoint a (p1E e), p2E = rotatePoint a (p2E e)}
 
 -- | Translate all enemies
 moveEnemies:: Float -> Estado -> Estado
@@ -110,13 +88,7 @@ moveEnemies tick e = e{enemies = map (moveEnemy $ getVecTranslate tick e) (enemi
 
 -- | Translate a Enemy by a given Vector
 moveEnemy:: Vector -> Enemy -> Enemy
-moveEnemy (x, y) e = e{p1E = p1n, p2E = p2n}
-    where
-        (x1, y1) = p1E e
-        (x2, y2) = p2E e
-        p1n = (x1 + x, y1 + y)
-        p2n = (x2 + x, y2 + y)
-
+moveEnemy v e = e{p1E = movePoint v (p1E e), p2E = movePoint v (p2E e)}
 
 getVecTranslate::Float -> Estado -> (Float, Float)
 getVecTranslate tick e = (vx * dist, vy * dist) 
