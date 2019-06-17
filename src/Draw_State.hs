@@ -8,6 +8,7 @@ import Data_structures
 import Constantes
 import Map_Filter
 import Enemy_Filter
+import Sprites
 import Utils
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
@@ -22,8 +23,8 @@ drawState e | (menu e) == MenuPlay = drawStatePlay e
 -- | Draw the current State
 drawStatePlay :: Estado -> Picture
 drawStatePlay e = Pictures[ pla
-                          , Translate 0 (-300) $ scale 0.1 0.1 $ text $ show (hpP $ player e)
-                          , Translate 0 (-315) $ scale 0.1 0.1 $ text $ show (ammo $ player e)
+                          , Translate 0 (-300) $ lifes (hpP (player e)) 201
+                          , Translate 0 (-330) $ scale 0.1 0.1 $ text $ show (ammo $ player e)
                           ] 
     where
         pla = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
@@ -72,4 +73,24 @@ target:: Color -> Float -> Picture
 target col r = color col $ Pictures[pol, Rotate 90 pol, Rotate 180 pol, Rotate (-90) pol]
     where
         u = r/14
-        pol = Translate (u/2) (u/2) $ Polygon [(0,0), (0,u*6), (u, u*6), (u, u), (u*6,u), (u*6, 0)]
+        pol = Translate (u/2) (u/2) $ Polygon [(0,0), (1,u*6), (u, u*6), (u, u), (u*6,u), (u*6, 0)]
+
+lifes:: Float -> Float -> Picture
+lifes hp tS | hp > 7    =Scale s s $ Pictures[f1, f2, f3, f4]
+            | hp > 6    =Scale s s $ Pictures[f1, f2, f3, h4]
+            | hp > 5    =Scale s s $ Pictures[f1, f2, f3]
+            | hp > 4    =Scale s s $ Pictures[f1, f2, h3]
+            | hp > 3    =Scale s s $ Pictures[f1, f2]
+            | hp > 2    =Scale s s $ Pictures[f1, h2]
+            | hp > 1    =Scale s s $ f1
+            | otherwise =Scale s s $ h1
+    where
+        s  = tS/56
+        f1 = Translate 0  (-5.5) $ heart
+        h1 = Translate 0  (-5.5) $ halfHeart
+        f2 = Translate 14 (-5.5) $ heart
+        h2 = Translate 14 (-5.5) $ halfHeart
+        f3 = Translate 28 (-5.5) $ heart
+        h3 = Translate 28 (-5.5) $ halfHeart
+        f4 = Translate 42 (-5.5) $ heart
+        h4 = Translate 42 (-5.5) $ halfHeart
