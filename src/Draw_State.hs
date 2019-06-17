@@ -139,7 +139,7 @@ lives hp tS | hp * 8 / maximumHealth > 7    =Scale s s $ Pictures[f1, f2, f3, f4
 target:: Color -> Float -> Picture
 target col r =  Pictures[pol, Rotate 90 pol, Rotate 180 pol, Rotate (-90) pol]
     where
-        lines = [(0,0), (1,u*6), (u, u*6), (u, u), (u*6,u), (u*6, 0)]
+        lines = [(0,0), (0,u*6), (u, u*6), (u, u), (u*6,u), (u*6, 0)]
         u = r/14
         pol = Translate (u/2) (u/2) $ Pictures[ color col                 $ Polygon lines
                                               , color (contrastColor col) $ lineLoop lines]
