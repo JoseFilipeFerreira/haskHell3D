@@ -47,8 +47,9 @@ drawMap3D :: Estado -> Picture
 drawMap3D e = Pictures $ map (drawWall3D e) $ getFinalMap (mapa e)
 
 drawWall3D:: Estado -> Wall -> Picture
-drawWall3D e w = Color (wColor w) $ Line[(xW1,(-h1)/2), (xW1,h1), (xW2,h2), (xW2,(-h2)/2), (xW1,(-h1)/2)]
+drawWall3D e w = Pictures[Color (wColor w) $ Polygon allPoints,Color (contrastColor (wColor w)) $ lineLoop allPoints]
     where
+        allPoints = [(xW1,(-h1)/2), (xW1,h1), (xW2,h2), (xW2,(-h2)/2)]
         (x1, y1) = p1W w
         (x2, y2) = p2W w
         (sx, sy) = winSize e
@@ -56,16 +57,20 @@ drawWall3D e w = Color (wColor w) $ Line[(xW1,(-h1)/2), (xW1,h1), (xW2,h2), (xW2
         d2 = distCoor (0,0) (x2,y2)
         h1 = (wallHeigth / d1) * nearPlane * (realToFrac sy/2)
         h2 = (wallHeigth / d2) * nearPlane * (realToFrac sy/2)
-        xW1 = xPostionWall e (x1, y1) 
-        xW2 = xPostionWall e (x2, y2) 
+        xW1 = xPostionPoint e (x1, y1) 
+        xW2 = xPostionPoint e (x2, y2) 
 
-xPostionWall :: Estado -> Coor -> Float
-xPostionWall e (x1, y1) = - realToFrac sx * nearPlane * tan normWall
+xPostionPoint :: Estado -> Coor -> Float
+xPostionPoint e (x1, y1) = - realToFrac sx * nearPlane * tan normWall
     where
         (sx, sy) = winSize e
         normWall = angPP (x1, y1)
         angPP:: Coor -> Float
         angPP (x1, y1) = (pi / 180) * ((180/pi) * atan(y1/x1))
+
+contrastColor:: Color -> Color
+contrastColor black = white
+contrastColor _     = black
 
 -- | Draw a given Wall in 2D
 drawWall2D :: Wall -> Picture
