@@ -7,7 +7,7 @@ module Sprites where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
--- | heart sprite with size 12 x 11 pixels
+-- | heart sprite with size 13 x 11 pixels
 heart :: Picture
 heart = Pictures [ out, r1, r2, r3, r4, r5]
     where
@@ -74,7 +74,7 @@ heart = Pictures [ out, r1, r2, r3, r4, r5]
                        , Translate 6  8  bP, Translate 5  9  bP
                        ]
 
--- | heart sprite with size 13 x 11 pixels
+-- | heart sprite with size 7 x 11 pixels
 halfHeart :: Picture
 halfHeart = Pictures [ out, r1, r2, r3, r4, r5]
     where
@@ -120,6 +120,7 @@ halfHeart = Pictures [ out, r1, r2, r3, r4, r5]
                        , Translate 5  9  bP
                        ]
 
+-- | Bullet sprite with size 12 x 21
 bullet:: Picture
 bullet = Pictures[s1, s3, s4, s2, s5, s6, s7, s8] 
     where

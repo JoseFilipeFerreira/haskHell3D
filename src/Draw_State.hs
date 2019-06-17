@@ -23,8 +23,8 @@ drawState e | (menu e) == MenuPlay = drawStatePlay e
 -- | Draw the current State
 drawStatePlay :: Estado -> Picture
 drawStatePlay e = Pictures[ pla
-                          , Translate 0 (-300) $ lifes (hpP (player e)) 201
-                          , Translate 0 (-330) $ scale 0.1 0.1 $ text $ show (ammo $ player e)
+                          , Translate 0 (-300) $ lives (hpP (player e)) 200
+                          , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
                           ] 
     where
         pla = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
@@ -75,8 +75,16 @@ target col r = color col $ Pictures[pol, Rotate 90 pol, Rotate 180 pol, Rotate (
         u = r/14
         pol = Translate (u/2) (u/2) $ Polygon [(0,0), (1,u*6), (u, u*6), (u, u), (u*6,u), (u*6, 0)]
 
-lifes:: Float -> Float -> Picture
-lifes hp tS | hp * 8 / maximumHealth > 7    =Scale s s $ Pictures[f1, f2, f3, f4]
+ammoShow:: Int -> Float -> Picture
+ammoShow a fS | a == 0    = Blank
+              | otherwise = Scale s s $ Pictures $ map (showBullet) [1..a]
+    where
+        s = fS / 12
+        showBullet:: Int -> Picture
+        showBullet p = Translate (fromIntegral(14 * (p-1))) (-10.5) bullet
+
+lives:: Float -> Float -> Picture
+lives hp tS | hp * 8 / maximumHealth > 7    =Scale s s $ Pictures[f1, f2, f3, f4]
             | hp * 8 / maximumHealth > 6    =Scale s s $ Pictures[f1, f2, f3, h4]
             | hp * 8 / maximumHealth > 5    =Scale s s $ Pictures[f1, f2, f3]
             | hp * 8 / maximumHealth > 4    =Scale s s $ Pictures[f1, f2, h3]
