@@ -7,6 +7,7 @@ module Utils where
 import Constantes
 import Data_structures
 import Graphics.Gloss.Geometry.Line
+import Graphics.Gloss.Data.Color
 import Data.Maybe
 
 -- | Calculate the area that is visible to the player
@@ -129,3 +130,8 @@ vetAngToCoor (a,n) = (x, y)
 -- | Convert degrees to rad
 grauToRad:: Float -> Float
 grauToRad x = x * pi / 180
+
+-- | get a contrasting colour
+contrastColor:: Color -> Color
+contrastColor c | c == black = white
+                | otherwise  = black
