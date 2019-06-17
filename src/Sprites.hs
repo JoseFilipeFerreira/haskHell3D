@@ -118,4 +118,48 @@ halfHeart = Pictures [ out, r1, r2, r3, r4, r5]
                        , Translate 2  10 bP, Translate 3  10 bP
                        , Translate 4  10 bP, Translate 6  8  bP
                        , Translate 5  9  bP
-                       ] 
+                       ]
+
+bullet:: Picture
+bullet = Pictures[s1, s3, s4, s2, s5, s6, s7, s8] 
+    where
+        s1 = Color (makeColor 0.757 0.616 0.043 1) $
+             Pictures[ Polygon [(0,3), (2,3), (2,12), (0,12)]
+                     , Polygon [(9,3), (12,3), (12,12), (9,12)]
+                     , Polygon [(0,0), (12,0), (12,1), (0,1)]
+                     , Polygon [(0,1), (2,1), (2,2), (0,2)]
+                     , Polygon [(9,1), (12,1), (12,2), (9,2)]
+                     ]
+        s2 = Color (makeColor 0.31 0.251 0.02 1) $
+             Pictures[ Polygon [(1,2), (11,2), (11,3), (1,3)]
+                     , Polygon [(1,12), (11,12), (11,13), (1,13)]
+                     ]
+        s3 = Color (makeColor 0.945 0.769 0.059 1) $
+             Pictures[ Polygon [(2,1), (9,1), (9,12), (2,12)]]
+        s4 = Color (makeColor 0.98 0.91 0.612 1) $
+             Pictures[ Polygon [(3,1), (5,1), (5,12), (3,12)]]
+        s5 = Color (makeColor 0.49 0.49 0.49 1) $
+             Pictures[ Polygon [(0,13), (12,13), (12,16), (0,16)]
+                     , Polygon [(1,16), (11,16), (11,18), (1,18)]
+                     , Polygon [(2,18), (10,18), (10,19), (2,19)]
+                     , Polygon [(3,19), (9,19), (9,20), (3,20)]
+                     , Polygon [(4,20), (8,20), (8,21), (4,21)]
+                     ]
+        s6 = Color (makeColor 0.2 0.2 0.2 1) $
+             Pictures[ Polygon [(7,13), (9,13), (9,14), (7,14)]
+                     , Polygon [(8,14), (10,14), (10,16), (8,16)]
+                     , Polygon [(7,16), (9,16), (9,18), (7,18)]
+                     , Polygon [(6,17), (8,17), (8,19), (6,19)]
+                     ]
+        s7 = Color (makeColor 0.8 0.8 0.8 1) $
+             Pictures[ Polygon [(2,14), (3,14), (3,16), (2,16)]
+                     , Polygon [(3,13), (5,13), (5,14), (3,14)]
+                     , Polygon [(4,14), (5,14), (5,17), (4,17)]
+                     , Polygon [(3,17), (4,17), (4,18), (3,18)]
+                     , Polygon [(5,17), (6,17), (6,19), (5,19)]
+                     ]
+        s8 = Color (makeColor 1 1 1 1) $
+             Pictures[ Polygon [(3,14), (4,14), (4,16), (3,16)]
+                     , Polygon [(4,17), (5,17), (5,19), (4,19)]
+                     ]
+
