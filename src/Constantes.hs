@@ -16,6 +16,9 @@ arrowRotationSpeed = 180
 walkSpeed :: Float
 walkSpeed = 3
 
+wallHeigth :: Float
+wallHeigth = 2
+
 -- | Angle of View
 viewAngle :: Float
 viewAngle = 90
