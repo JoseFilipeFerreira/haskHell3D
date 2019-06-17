@@ -76,13 +76,13 @@ target col r = color col $ Pictures[pol, Rotate 90 pol, Rotate 180 pol, Rotate (
         pol = Translate (u/2) (u/2) $ Polygon [(0,0), (1,u*6), (u, u*6), (u, u), (u*6,u), (u*6, 0)]
 
 lifes:: Float -> Float -> Picture
-lifes hp tS | hp > 7    =Scale s s $ Pictures[f1, f2, f3, f4]
-            | hp > 6    =Scale s s $ Pictures[f1, f2, f3, h4]
-            | hp > 5    =Scale s s $ Pictures[f1, f2, f3]
-            | hp > 4    =Scale s s $ Pictures[f1, f2, h3]
-            | hp > 3    =Scale s s $ Pictures[f1, f2]
-            | hp > 2    =Scale s s $ Pictures[f1, h2]
-            | hp > 1    =Scale s s $ f1
+lifes hp tS | hp * 8 / maximumHealth > 7    =Scale s s $ Pictures[f1, f2, f3, f4]
+            | hp * 8 / maximumHealth > 6    =Scale s s $ Pictures[f1, f2, f3, h4]
+            | hp * 8 / maximumHealth > 5    =Scale s s $ Pictures[f1, f2, f3]
+            | hp * 8 / maximumHealth > 4    =Scale s s $ Pictures[f1, f2, h3]
+            | hp * 8 / maximumHealth > 3    =Scale s s $ Pictures[f1, f2]
+            | hp * 8 / maximumHealth > 2    =Scale s s $ Pictures[f1, h2]
+            | hp * 8 / maximumHealth > 1    =Scale s s $ f1
             | otherwise =Scale s s $ h1
     where
         s  = tS/56

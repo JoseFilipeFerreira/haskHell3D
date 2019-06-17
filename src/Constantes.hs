@@ -5,6 +5,9 @@ Description : Module containig all data structures for haskHell 3D
 module Constantes where
 import Data_structures
 
+maximumHealth :: Float
+maximumHealth = 8
+
 -- | Speed the player rotates at when using the arrows
 arrowRotationSpeed :: Float
 arrowRotationSpeed = 180
