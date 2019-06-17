@@ -22,17 +22,17 @@ drawState e | (menu e) == MenuPlay = drawStatePlay e
 
 -- | Draw the current State
 drawStatePlay :: Estado -> Picture
-drawStatePlay e = Pictures[ pla
+drawStatePlay e = Pictures[ Translate (-300) (-300) pla
                           , Translate 0 (-300) $ lives (hpP (player e)) 200
                           , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
+                          , Scale 5 5 $ drawMap3D e
                           ] 
     where
         pla = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
-                                                   , drawMap2D (mapa e)
+                                                   , drawMap2D    (mapa e)
                                                    , drawEnemies2DAll (enemies e)
                                                    , drawEnemies2D (mapa e) (enemies e)
                                                    , drawnPlayer2D e
-                                                   , Line viewBox
                                                    ]
 
 -- | Draw the final Map in 2D
@@ -42,6 +42,30 @@ drawMap2D  = Pictures . (map drawWall2D) . getFinalMap
 -- | Draw a given Map
 drawMap2DAll::Mapa -> Picture
 drawMap2DAll = Pictures . (map drawWall2D) . (map (paintWall orange))
+
+drawMap3D :: Estado -> Picture
+drawMap3D e = Pictures $ map (drawWall3D e) $ getFinalMap (mapa e)
+
+drawWall3D:: Estado -> Wall -> Picture
+drawWall3D e w = Color (wColor w) $ Line[(xW1,(-h1)/2), (xW1,h1), (xW2,h2), (xW2,(-h2)/2), (xW1,(-h1)/2)]
+    where
+        (x1, y1) = p1W w
+        (x2, y2) = p2W w
+        (sx, sy) = winSize e
+        d1 = distCoor (0,0) (x1,y1)
+        d2 = distCoor (0,0) (x2,y2)
+        h1 = (wallHeigth / d1) * nearPlane * (realToFrac sy/2)
+        h2 = (wallHeigth / d2) * nearPlane * (realToFrac sy/2)
+        xW1 = xPostionWall e (x1, y1) 
+        xW2 = xPostionWall e (x2, y2) 
+
+xPostionWall :: Estado -> Coor -> Float
+xPostionWall e (x1, y1) = - realToFrac sx * nearPlane * tan normWall
+    where
+        (sx, sy) = winSize e
+        normWall = angPP (x1, y1)
+        angPP:: Coor -> Float
+        angPP (x1, y1) = (pi / 180) * ((180/pi) * atan(y1/x1))
 
 -- | Draw a given Wall in 2D
 drawWall2D :: Wall -> Picture
@@ -54,7 +78,6 @@ drawEnemies2D m = Pictures . (map (drawEnemy2D red)) . (getFinalEnemies  m)
 -- | Draw all the enemies
 drawEnemies2DAll :: Enemies -> Picture
 drawEnemies2DAll = Pictures . (map (drawEnemy2D green))
-
 
 -- | draw a given enemy in a given color
 drawEnemy2D :: Color -> Enemy -> Picture
