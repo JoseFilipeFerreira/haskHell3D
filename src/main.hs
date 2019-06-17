@@ -10,6 +10,7 @@ import Data_structures
 import React_Time
 import React_Event
 import Draw_State
+import Constantes
 
 main :: IO ()
 main = do inicio <- initialState
@@ -27,7 +28,7 @@ joga inicio = play
 
 initialState :: IO Estado
 initialState = do  
-                let defaultPlayer = Player 0 10 10 6 10
+                let defaultPlayer = Player 0 10 10 6 maximumHealth
                 let defaultAction = Actions False False False False False
                 return Estado { mapa    = testMap
                               , enemies = testEnemies
