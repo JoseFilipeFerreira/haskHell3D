@@ -8,6 +8,7 @@ import Constantes
 import Data_structures
 import Graphics.Gloss.Geometry.Line
 import Graphics.Gloss.Data.Color
+import Graphics.Gloss.Data.Vector
 import Data.Maybe
 
 -- | Calculate the area that is visible to the player
@@ -68,18 +69,8 @@ getLinePoints p1 p2 nP = map (calcVec p1 vec step) [0..nP]
         calcVec :: Coor -> Coor -> Float -> Float -> Coor
         calcVec (x, y) (vx, vy) f n = (x + vx * f * n, y + vy * f * n)
 
-unitVetorVec:: Vector -> Vector
-unitVetorVec (0,0) = (0, 0) 
-unitVetorVec (x,y) = ((x / bot), (y / bot)) 
-    where
-        bot = sqrt(x^2 + y^2)
-
--- | Calculate the unit vector that goes from point a to point b
-unitVetor:: Coor -> Coor -> Vector
-unitVetor (x1, y1) (x2, y2) = ((x / bot), (y / bot)) 
-    where
-        (x, y) = (x2 - x1, y2 - y1)
-        bot = sqrt(x^2 + y^2)
+        unitVetor:: Coor -> Coor -> Vector
+        unitVetor (x1, y1) (x2, y2) = normalizeV (x2 - x1, y2 - y1)
 
 -- | Check if a point is outside the viewBox
 pointOutside::Coor -> Bool

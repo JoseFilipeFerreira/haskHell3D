@@ -22,9 +22,7 @@ drawState e | (menu e) == MenuPlay = drawStatePlay e
 
 -- | Draw the current State
 drawStatePlay :: Estado -> Picture
-drawStatePlay e = Pictures[ Color (makeColor (135/255) (206/255) (250/255) 1) $ Polygon [(-1000, 0), (1000,0), (1000, 1000), (-1000, 1000)]
-                          , Color (makeColor (138/255) (69/255) (19/255) 1) $ Polygon [(-1000, 0), (1000,0), (1000, -1000), (-1000, -1000)]
-                          , Scale 5 5 $ drawAll3D e
+drawStatePlay e = Pictures[ Scale 5 5 $ drawAll3D e
                           , target red 50
                           , Translate 0 (-300) $ lives (hpP (player e)) 200
                           , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
@@ -40,10 +38,15 @@ drawStatePlay e = Pictures[ Color (makeColor (135/255) (206/255) (250/255) 1) $ 
                                                    ]
 
 drawAll3D::Estado -> Picture
-drawAll3D e = Pictures $ drawParts e m en
+drawAll3D e = Pictures $ (floor : (sky : drawParts e m en))
     where
-        en = getFinalEnemies (mapa e) (enemies e)
-        m  = getFinalMap (mapa e)
+        (sxI, syI) = winSize e
+        (sx, sy) = ((fromIntegral sxI) / 2, (fromIntegral syI) / 2)
+        en    = getFinalEnemies (mapa e) (enemies e)
+        m     = getFinalMap (mapa e)
+        floor = Color (makeColor (138/255) (69/255)  (19/255)  1) $ Polygon [(-sx, 0), (sx,0), (sx, -sy), (-sx, -sy)]
+        sky   = Color (makeColor (135/255) (206/255) (250/255) 1) $ Polygon [(-sx, 0), (sx,0), (sx,  sy), (-sx, sy)]
+
 
 drawParts:: Estado -> Mapa -> Enemies -> [Picture]
 drawParts e [] [] = []

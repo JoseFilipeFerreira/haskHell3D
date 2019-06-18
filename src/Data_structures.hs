@@ -25,9 +25,6 @@ data MenuPos = MenuPlay
 -- | Coordinates of a point
 type Coor = (Float, Float)
 
--- | Coordinates of a vector
-type Vector = (Float, Float)
-
 -- | Define wall as the end points and it's color
 data Wall = Wall
                 { p1W    :: Coor
