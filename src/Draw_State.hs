@@ -22,12 +22,15 @@ drawState e | (menu e) == MenuPlay = drawStatePlay e
 
 -- | Draw the current State
 drawStatePlay :: Estado -> Picture
-drawStatePlay e = Pictures[ Translate (-300) (-300) pla
-                          , Translate 0 (-300) $ lives (hpP (player e)) 200
-                          , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
+drawStatePlay e = Pictures[ Color (makeColor (135/255) (206/255) (250/255) 1) $ Polygon [(-1000, 0), (1000,0), (1000, 1000), (-1000, 1000)]
+                          , Color (makeColor (138/255) (69/255) (19/255) 1) $ Polygon [(-1000, 0), (1000,0), (1000, -1000), (-1000, -1000)]
                           , Scale 5 5 $ drawAll3D e
                           , target red 50
-                          ] 
+                          , Translate 0 (-300) $ lives (hpP (player e)) 200
+                          , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
+                          , Translate (-300) (-300) pla
+                          ]
+ 
     where
         pla = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)
                                                    , drawMap2D    (mapa e)
@@ -54,22 +57,24 @@ drawParts e (w:tm) (en:te) | dw < den  = ((drawEnemy3D e en) : (drawParts e (w:t
 
 -- | Draw a given wall in 3D
 drawWall3D:: Estado -> Wall -> Picture
-drawWall3D e w = drawLine3D e (wColor w) (p1W w) (p2W w)
+drawWall3D e w = drawLine3D e wallHeigth (wColor w) (p1W w) (p2W w)
 
 drawEnemy3D:: Estado -> Enemy -> Picture
-drawEnemy3D e en = drawLine3D e red (p1E en) (p2E en)
+drawEnemy3D e en = drawLine3D e enemyHeigth red (p1E en) (p2E en)
 
-drawLine3D:: Estado -> Color -> Coor -> Coor -> Picture
-drawLine3D e col p1 p2 = Pictures[ Color col                 $ Polygon  allPoints
+drawLine3D:: Estado -> Float -> Color -> Coor -> Coor -> Picture
+drawLine3D e h col p1 p2 = Pictures[ Color col                 $ Polygon  allPoints
                                  , Color (contrastColor col) $ lineLoop allPoints
                                  ]
     where
-        allPoints = [(xW1,(-h1)/2), (xW1,h1), (xW2,h2), (xW2,(-h2)/2)]
+        allPoints = [(xW1,pH1), (xW1,h1), (xW2,h2), (xW2,pH2)]
         (_, sy) = winSize e
         d1 = distCoor (0,0) p1
         d2 = distCoor (0,0) p2
-        h1 = (wallHeigth / d1) * nearPlane * (realToFrac sy/2)
-        h2 = (wallHeigth / d2) * nearPlane * (realToFrac sy/2)
+        pH1 = - playerHeigth * (1/d1) * nearPlane * (realToFrac sy/2) 
+        pH2 = - playerHeigth * (1/d2) * nearPlane * (realToFrac sy/2) 
+        h1 = (h / d1)       * nearPlane * (realToFrac sy/2) + pH1
+        h2 = (h / d2)       * nearPlane * (realToFrac sy/2) + pH2
         xW1 = xPostionPoint e p1
         xW2 = xPostionPoint e p2
 
