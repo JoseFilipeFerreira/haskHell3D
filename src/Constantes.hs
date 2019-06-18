@@ -16,8 +16,14 @@ arrowRotationSpeed = 180
 walkSpeed :: Float
 walkSpeed = 3
 
+playerHeigth :: Float
+playerHeigth = 1
+
 wallHeigth :: Float
-wallHeigth = 2
+wallHeigth = 3
+
+enemyHeigth :: Float
+enemyHeigth = 2
 
 -- | Angle of View
 viewAngle :: Float
@@ -29,11 +35,11 @@ nearPlane = 0.1
 
 -- | Distance to the farplane
 farPlane :: Float
-farPlane = 15
+farPlane = 30
 
 -- | Number of points to check if a wall is visible
 precisionWallHidden :: Float
-precisionWallHidden = 20
+precisionWallHidden = 50
 
 -- | Number of points to calculate the distance to a wall
 precisionWallDist :: Float

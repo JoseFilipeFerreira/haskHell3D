@@ -20,7 +20,7 @@ joga:: Estado -> IO()
 joga inicio = play
         (InWindow  "haskHell 3D" (1280,720) (0,0))
         (greyN 0.8)
-        30
+        144
         inicio
         drawState
         reactEvent
@@ -46,30 +46,32 @@ testEnemies = [ Enemy (5 ,12) (6,12 ) 10 1 0.3
               ]
 
 testMap::Mapa
-testMap = [ Wall (-1,-1) (-1,6)  black
-          , Wall (-1,-1) (10,-1) black
-          , Wall (10,-1) (10,1) black
-          , Wall (10,1) (15,1) black
-          , Wall (15,1) (15,3) black
-          , Wall (15,3) (16,3) black
-          , Wall (16,3) (16,5) black
-          , Wall (16,5) (17,5) black
-          , Wall (17,5) (17,13) black
-          , Wall (17,13) (13,13) black
-          , Wall (13,13) (13,14) black
-          , Wall (13,14) (1,14) black
-          , Wall (1,14) (1,8) black
-          , Wall (1,8) (4,8) black
-          , Wall (4,8) (4,6) black
-          , Wall (4,6) (-1,6) black
-          , Wall (6,6) (6,8) black
-          , Wall (6,8) (9,8) black
-          , Wall (9,8) (9,9) black
-          , Wall (9,9) (13,9) black
-          , Wall (13,9) (13,5) black
-          , Wall (13,5) (12,5) black
-          , Wall (12,5) (12,4) black
-          , Wall (12,4) (10,4) black
-          , Wall (10,4) (10,6) black
-          , Wall (10,6) (6,6) black
+testMap = [ Wall (-1,-1) (-1,6)  col
+          , Wall (-1,-1) (10,-1) col
+          , Wall (10,-1) (10,1)  col
+          , Wall (10,1) (15,1)   col
+          , Wall (15,1) (15,3)   col
+          , Wall (15,3) (16,3)   col
+          , Wall (16,3) (16,5)   col
+          , Wall (16,5) (17,5)   col
+          , Wall (17,5) (17,13)  col
+          , Wall (17,13) (13,13) col
+          , Wall (13,13) (13,14) col
+          , Wall (13,14) (1,14)  col
+          , Wall (1,14) (1,8)    col
+          , Wall (1,8) (4,8)     col
+          , Wall (4,8) (4,6)     col
+          , Wall (4,6) (-1,6)    col
+          , Wall (6,6) (6,8)     col
+          , Wall (6,8) (9,8)     col
+          , Wall (9,8) (9,9)     col
+          , Wall (9,9) (13,9)    col
+          , Wall (13,9) (13,5)   col
+          , Wall (13,5) (12,5)   col
+          , Wall (12,5) (12,4)   col
+          , Wall (12,4) (10,4)   col
+          , Wall (10,4) (10,6)   col
+          , Wall (10,6) (6,6)    col
           ]
+    where
+        col = makeColor (210/255) (180/255) (140/255) 1
