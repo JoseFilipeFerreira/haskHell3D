@@ -18,9 +18,9 @@ main = do inicio <- initialState
 
 joga:: Estado -> IO()
 joga inicio = play
-        (InWindow  "haskHell 3D" (1280,720) (0,0))
+        FullScreen
         (greyN 0.8)
-        144
+        30
         inicio
         drawState
         reactEvent

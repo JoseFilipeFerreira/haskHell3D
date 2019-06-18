@@ -9,6 +9,7 @@ import Constantes
 import Utils
 import Enemy_Filter
 import Graphics.Gloss.Data.Color
+import Graphics.Gloss.Data.Vector
 import Data.Maybe
 import Data.List
 
@@ -94,7 +95,8 @@ getVecTranslate::Float -> Estado -> (Float, Float)
 getVecTranslate tick e = (vx * dist, vy * dist) 
     where
         dist = tick * walkSpeed
-        (vx, vy) = unitVetorVec $ sumVec[wL, wR, w, b]
+        vt = sumVec[wL, wR, w, b]
+        (vx, vy) = if (vt == (0,0)) then vt else normalizeV vt
         wL   = if walkL $ actions e    then ( 0, -1) else (0, 0)
         wR   = if walkR $ actions e    then ( 0,  1) else (0, 0)
         w    = if walk $ actions e     then (-1,  0) else (0, 0)
