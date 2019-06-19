@@ -13,7 +13,7 @@ import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
 drawAll3D::Estado -> Picture
-drawAll3D e = Pictures $ (floor : (sky : drawParts e m en)) ++ [iron]
+drawAll3D e = Pictures $ [floor, sky] ++ drawParts e m en ++ [iron]
     where
         (sxI, syI) = winSize e
         (sx, sy) = ((fromIntegral sxI) / 2, (fromIntegral syI) / 2)
@@ -51,15 +51,17 @@ drawLine3D e h col p1 p2 = Pictures[ Color col                 $ Polygon  allPoi
         (_, sy) = winSize e
         d1 = distCoor (0,0) p1
         d2 = distCoor (0,0) p2
-        pH1 = - playerHeigth * (1/d1) * nearPlane * (realToFrac sy/2) 
-        pH2 = - playerHeigth * (1/d2) * nearPlane * (realToFrac sy/2) 
+        pH1 = - (playerHeigth/d1) * nearPlane * (realToFrac sy/2) 
+        pH2 = - (playerHeigth/d2) * nearPlane * (realToFrac sy/2) 
         h1 = (h / d1)       * nearPlane * (realToFrac sy/2) + pH1
-        h2 = (h / d2)       * nearPlane * (realToFrac sy/2) + pH2
+        h2 = (h / d2) * nearPlane * (realToFrac sy/2) + pH2
         xW1 = xPostionPoint e p1
         xW2 = xPostionPoint e p2
 
+        lV = snd $ head viewBox
+
         xPostionPoint :: Estado -> Coor -> Float
-        xPostionPoint e (x, y) = - realToFrac(fst(winSize e)) * nearPlane * (y/x)
+        xPostionPoint e (x, y) = (realToFrac(fst $ winSize e) / (lV*2)) * nearPlane * (y/x)
 
 -- | Draws the aim in the screen
 target:: Color -> Float -> Picture
