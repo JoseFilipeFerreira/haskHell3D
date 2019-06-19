@@ -94,7 +94,7 @@ moveEnemy v e = e{p1E = movePoint v (p1E e), p2E = movePoint v (p2E e)}
 getVecTranslate::Float -> Estado -> (Float, Float)
 getVecTranslate tick e = (vx * dist, vy * dist) 
     where
-        dist = tick * walkSpeed
+        dist = tick * if run(actions e) then runSpeed else walkSpeed
         vt = sumVec[wL, wR, w, b]
         (vx, vy) = if (vt == (0,0)) then vt else normalizeV vt
         wL   = if walkL $ actions e    then ( 0, -1) else (0, 0)

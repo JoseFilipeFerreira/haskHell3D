@@ -16,14 +16,17 @@ arrowRotationSpeed = 180
 walkSpeed :: Float
 walkSpeed = 3
 
-playerHeigth :: Float
-playerHeigth = 1
+runSpeed :: Float
+runSpeed = 7
+
+playerHeigth::Float
+playerHeigth = 3
 
 wallHeigth :: Float
-wallHeigth = 3
+wallHeigth = 10
 
 enemyHeigth :: Float
-enemyHeigth = 2
+enemyHeigth = 3.5
 
 -- | Angle of View
 viewAngle :: Float

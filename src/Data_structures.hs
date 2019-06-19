@@ -63,6 +63,7 @@ data Actions = Actions
                 , walkL    :: Bool
                 , walkR    :: Bool
                 , shoot    :: Bool
+                , run      :: Bool
                 }
 
 -- | Images used in the game
