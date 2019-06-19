@@ -6,7 +6,6 @@ module React_Event where
 
 import Data_structures
 import Constantes
-import Utils
 import Graphics.Gloss.Interface.Pure.Game
 
 -- | React to an event

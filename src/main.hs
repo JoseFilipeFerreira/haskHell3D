@@ -5,7 +5,6 @@ Description : Main Module in haskHell 3D
 module Main where
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Interface.Pure.Game
-import Data.Ord
 import Data_structures
 import React_Time
 import React_Event
