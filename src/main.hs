@@ -28,8 +28,13 @@ joga inicio = play
 
 initialState :: IO Estado
 initialState = do  
-                let defaultPlayer = Player 0 10 10 6 maximumHealth
-                let defaultAction = Actions False False False False False
+                let defaultPlayer = Player{ xMove   = 0
+                                          , range   = 10
+                                          , ammo    = 10
+                                          , damage  = 6
+                                          , hpP     = maximumHealth
+                                          }
+                let defaultAction = Actions False False False False False False
                 return Estado { mapa    = testMap
                               , enemies = testEnemies
                               , player  = defaultPlayer

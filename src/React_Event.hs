@@ -11,26 +11,21 @@ import Graphics.Gloss.Interface.Pure.Game
 
 -- | React to an event
 reactEvent :: Event -> Estado -> Estado
-reactEvent (EventResize size)             e               = e {winSize = size}
-reactEvent (EventKey (Char 'w') Down _ _) e               = e{actions = (actions e){walk  = True}}
-reactEvent (EventKey (Char 'w') Up   _ _) e               = e{actions = (actions e){walk  = False}}
-reactEvent (EventKey (Char 's') Down _ _) e               = e{actions = (actions e){moonWalk  = True}}
-reactEvent (EventKey (Char 's') Up   _ _) e               = e{actions = (actions e){moonWalk  = False}}
-reactEvent (EventKey (Char 'a') Down _ _) e               = e{actions = (actions e){walkL = True}}
-reactEvent (EventKey (Char 'a') Up   _ _) e               = e{actions = (actions e){walkL = False}}
-reactEvent (EventKey (Char 'd') Down _ _) e               = e{actions = (actions e){walkR = True}}
-reactEvent (EventKey (Char 'd') Up   _ _) e               = e{actions = (actions e){walkR = False}}
-reactEvent (EventKey (SpecialKey KeyEnter)    Down _ _) e = e{actions = (actions e){shoot = True}}
-reactEvent (EventKey (SpecialKey KeyEnter)    Up   _ _) e = e{actions = (actions e){shoot = False}}
-reactEvent (EventKey (MouseButton LeftButton) Down _ _) e = e{actions = (actions e){shoot = True}}
-reactEvent (EventKey (MouseButton LeftButton) Up   _ _) e = e{actions = (actions e){shoot = False}}
-reactEvent (EventMotion (x,_))                          e = e{player = (player e){xMove = x}}
-reactEvent (EventKey (SpecialKey KeyLeft)    Down _ _)  e = e{player = (player e){xMove = -arrowRotationSpeed}}
-reactEvent (EventKey (SpecialKey KeyLeft)    Up _ _)    e = e{player = (player e){xMove = nMove}}
+reactEvent (EventResize size)                        e = e{winSize = size}
+reactEvent (EventKey (Char 'w')               s _ _) e = e{actions = (actions e){walk     = (s == Down) }}
+reactEvent (EventKey (Char 's')               s _ _) e = e{actions = (actions e){moonWalk = (s == Down) }}
+reactEvent (EventKey (Char 'a')               s _ _) e = e{actions = (actions e){walkL    = (s == Down) }}
+reactEvent (EventKey (Char 'd')               s _ _) e = e{actions = (actions e){walkR    = (s == Down) }}
+reactEvent (EventKey (SpecialKey KeyShiftL)   s _ _) e = e{actions = (actions e){run      = (s == Down) }}
+reactEvent (EventKey (SpecialKey KeyEnter)    s _ _) e = e{actions = (actions e){shoot    = (s == Down) }}
+reactEvent (EventKey (MouseButton LeftButton) s _ _) e = e{actions = (actions e){shoot    = (s == Down) }}
+reactEvent (EventMotion (x,_))                       e = e{player  = (player  e){xMove    = x}}
+reactEvent (EventKey (SpecialKey KeyLeft)  Down _ _) e = e{player  = (player  e){xMove    = -arrowRotationSpeed}}
+reactEvent (EventKey (SpecialKey KeyLeft)  Up   _ _) e = e{player  = (player  e){xMove    = nMove}}
     where
         nMove = if (xMove(player e) == -arrowRotationSpeed) then 0 else xMove $ player e
-reactEvent (EventKey (SpecialKey KeyRight)   Down _ _)  e = e{player = (player e){xMove = arrowRotationSpeed}}
-reactEvent (EventKey (SpecialKey KeyRight)   Up _ _)    e = e{player = (player e){xMove = nMove}}
+reactEvent (EventKey (SpecialKey KeyRight) Down _ _) e = e{player  = (player  e){xMove    = arrowRotationSpeed}}
+reactEvent (EventKey (SpecialKey KeyRight) Up   _ _) e = e{player  = (player  e){xMove    = nMove}}
     where
         nMove = if (xMove(player e) == arrowRotationSpeed) then 0 else xMove $ player e
 reactEvent _ e = e
