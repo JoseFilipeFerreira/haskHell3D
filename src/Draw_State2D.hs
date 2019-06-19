@@ -8,13 +8,9 @@ import Data_structures
 import Constantes
 import Map_Filter
 import Enemy_Filter
-import Sprites
 import Utils
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
-import Data.List
-import Data.Ord
-import Data.Maybe
 
 drawAll2D:: Estado -> Picture
 drawAll2D e = Rotate (-90) $ Scale 20 20 $ Pictures[ drawMap2DAll (mapa e)

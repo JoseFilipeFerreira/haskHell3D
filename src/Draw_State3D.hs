@@ -8,13 +8,9 @@ import Data_structures
 import Constantes
 import Map_Filter
 import Enemy_Filter
-import Sprites
 import Utils
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
-import Data.List
-import Data.Ord
-import Data.Maybe 
 
 drawAll3D::Estado -> Picture
 drawAll3D e = Pictures $ (floor : (sky : drawParts e m en)) ++ [iron]

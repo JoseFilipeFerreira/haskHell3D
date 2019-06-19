@@ -6,22 +6,16 @@ module Draw_HUD where
 
 import Data_structures
 import Constantes
-import Map_Filter
-import Enemy_Filter
 import Sprites
-import Utils
 import Draw_State2D
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
-import Data.List
-import Data.Ord
-import Data.Maybe
 
 drawHUD :: Estado -> Picture
 drawHUD e = Pictures[ Translate 0 (-300) $ lives (hpP (player e)) 200
-                          , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
-                          , Translate (-300) (-300) $ drawAll2D e
-                          ]
+                    , Translate 0 (-340) $ ammoShow (ammo (player e)) 20
+                    , Translate (-300) (-300) $ drawAll2D e
+                    ]
 
 ammoShow:: Int -> Float -> Picture
 ammoShow a fS | a == 0    = Blank
