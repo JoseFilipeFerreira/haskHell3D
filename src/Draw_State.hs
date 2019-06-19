@@ -16,7 +16,7 @@ drawState e | (menu e) == MenuPlay = drawStatePlay e
 
 -- | Draw the current State
 drawStatePlay :: Estado -> Picture
-drawStatePlay e = Pictures[ Scale 5 5 $ drawAll3D e
+drawStatePlay e = Pictures[ drawAll3D e
                           , drawHUD e
                           ]
 
