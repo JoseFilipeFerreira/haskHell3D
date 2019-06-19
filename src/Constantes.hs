@@ -19,13 +19,13 @@ runSpeed :: Float
 runSpeed = 7
 
 playerHeigth::Float
-playerHeigth = 3
+playerHeigth = 1
 
 wallHeigth :: Float
-wallHeigth = 10
+wallHeigth = 3
 
 enemyHeigth :: Float
-enemyHeigth = 3.5
+enemyHeigth = 2
 
 -- | Angle of View
 viewAngle :: Float
