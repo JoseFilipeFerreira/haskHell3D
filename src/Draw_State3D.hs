@@ -12,6 +12,7 @@ import Utils
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
+-- | Draw the entire state in 3D
 drawAll3D::Estado -> Picture
 drawAll3D e = Pictures $ [floor, sky] ++ drawParts e m en ++ [iron]
     where
@@ -37,9 +38,11 @@ drawParts e (w:tm) (en:te) | dw < den  = ((drawEnemy3D e en) : (drawParts e (w:t
 drawWall3D:: Estado -> Wall -> Picture
 drawWall3D e w = drawLine3D e wallHeigth (wColor w) (p1W w) (p2W w)
 
+-- | Draw a given enemy in 3D
 drawEnemy3D:: Estado -> Enemy -> Picture
 drawEnemy3D e en = drawLine3D e enemyHeigth red (p1E en) (p2E en)
 
+-- | Draw a line in 3D
 drawLine3D:: Estado -> Float -> Color -> Coor -> Coor -> Picture
 drawLine3D e h col (x1, y1) (x2, y2) = Pictures[ Color col                 $ Polygon  allPoints
                                                , Color (contrastColor col) $ lineLoop allPoints

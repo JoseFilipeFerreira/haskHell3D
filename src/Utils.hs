@@ -69,8 +69,8 @@ getLinePoints p1 p2 nP = map (calcVec p1 vec step) [0..nP]
         calcVec :: Coor -> Coor -> Float -> Float -> Coor
         calcVec (x, y) (vx, vy) f n = (x + vx * f * n, y + vy * f * n)
 
-        unitVetor:: Coor -> Coor -> Vector
-        unitVetor (x1, y1) (x2, y2) = normalizeV (x2 - x1, y2 - y1)
+unitVetor:: Coor -> Coor -> Vector
+unitVetor (x1, y1) (x2, y2) = normalizeV (x2 - x1, y2 - y1)
 
 -- | Check if a point is outside the viewBox
 pointOutside::Coor -> Bool
