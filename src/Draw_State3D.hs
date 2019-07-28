@@ -44,11 +44,13 @@ drawEnemy3D e en = drawLine3D e enemyHeigth red (p1E en) (p2E en)
 
 -- | Draw a line in 3D
 drawLine3D:: Estado -> Float -> Color -> Coor -> Coor -> Picture
-drawLine3D e h col (x1, y1) (x2, y2) = Pictures[ Color col                 $ Polygon  allPoints
-                                               , Color (contrastColor col) $ lineLoop allPoints
-                                               ]
+drawLine3D e h col p1 p2 = Pictures[ Color col                 $ Polygon  (getCornerPoints e h p1 p2)
+                                   , Color (contrastColor col) $ lineLoop (getCornerPoints e h p1 p2)
+                                   ]
+
+getCornerPoints::Estado -> Float -> Coor -> Coor -> [Coor]
+getCornerPoints e h (x1, y1) (x2, y2) = [(xW1,pH1), (xW1,h1), (xW2,h2), (xW2,pH2)] 
     where
-        allPoints = [(xW1,pH1), (xW1,h1), (xW2,h2), (xW2,pH2)]
         d1  = distCoor (0,0) (x1, y1)
         d2  = distCoor (0,0) (x2, y2)
         hW  = h - playerHeigth

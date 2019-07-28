@@ -4,7 +4,6 @@ Description : Module containig all data structures for haskHell 3D
 -}
 module Data_structures where
 
-import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
 
 -- | Game state
@@ -65,10 +64,3 @@ data Actions = Actions
                 , shoot    :: Bool
                 , run      :: Bool
                 }
-
--- | Images used in the game
-data Images = Images
-                { caca :: Picture
-                , coco :: Picture
-                }
-

@@ -14,7 +14,7 @@ import Data.Maybe
 
 -- | Get the final map with only the visible walls sorted from the farthest to the closest
 getFinalMap:: Mapa -> Mapa
-getFinalMap = reverse . (sortOn distWall) .filterUselessWalls
+getFinalMap = reverse . (sortOn distWall) . filterUselessWalls
 
 -- | Filter all the walls that are outside the viewBox or covered by other walls
 filterUselessWalls:: Mapa -> Mapa
@@ -28,7 +28,7 @@ filterOutsideViewBox e = map fromJust $ filter isJust (map instersectWall e)
 instersectWall:: Wall -> Maybe Wall
 instersectWall w | wallOutside w && insideViewBox = Nothing
                  | insideViewBox                  = Just w
-                 | otherwise                      = Just (squashWall w)
+                 | otherwise                      = Just $ squashWall w
     where
         p1 = p1W w
         p2 = p2W w

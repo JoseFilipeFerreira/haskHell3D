@@ -10,7 +10,6 @@ import React_Time
 import React_Event
 import Draw_State
 import Constantes
-import Map
 
 main :: IO ()
 main = do inicio <- initialState
@@ -35,7 +34,7 @@ initialState = do
                                           , hpP     = maximumHealth
                                           }
                 let defaultAction = Actions False False False False False False
-                return Estado { mapa    = correctMap testMap
+                return Estado { mapa    = testMap
                               , enemies = testEnemies
                               , player  = defaultPlayer
                               , actions = defaultAction

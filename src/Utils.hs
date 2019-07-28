@@ -61,9 +61,10 @@ getEnemyPoints e nP = getLinePoints (p1E e) (p2E e) nP
 
 -- | Get N points between two coordinates
 getLinePoints:: Coor -> Coor -> Float -> [Coor]
-getLinePoints p1 p2 nP = map (calcVec p1 vec step) [0..nP]
+getLinePoints p1 p2 nP = map (calcVec p1 vec step) [0.. nPd]
     where
-        step = (distCoor p1 p2) / nP
+        nPd = nP * (distCoor p1 p2)
+        step = (distCoor p1 p2) / nPd
         vec  = unitVetor p1 p2
 
         calcVec :: Coor -> Coor -> Float -> Float -> Coor
