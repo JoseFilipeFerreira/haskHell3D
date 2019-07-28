@@ -49,7 +49,7 @@ precisionWallDist = 10
 
 -- | Number of points to check if a wall is visible
 precisionEnemyHidden :: Float
-precisionEnemyHidden = 10
+precisionEnemyHidden = 20
 
 -- | Number of points to calculate the distance to a wall
 precisionEnemyDist :: Float
