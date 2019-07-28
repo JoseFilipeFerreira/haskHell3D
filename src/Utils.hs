@@ -40,16 +40,33 @@ distEnemy = minimum . (map (distCoor (0,0))) . (flip getEnemyPoints precisionEne
 isWallVisible:: Mapa -> Wall -> Bool
 isWallVisible walls w = any (id) $ map (isPointVisible filteredWalls) wallPoints
     where
-        wallPoints = init $ tail $ getWallPoints w precisionWallHidden
+        wallPoints = getWallPoints w precisionWallHidden
+        filteredWalls = filter (/=w) walls
+
+-- | Check if a wall is Fully visible
+isWallFullyVisible:: Mapa -> [Enemy] -> Wall -> Bool
+isWallFullyVisible walls en w = (all (id) $ map (isPointVisible filteredWalls) wallPoints)
+                             && (all (id) $ map (isPointVisibleEnemy en) wallPoints)
+                  
+    where
+        wallPoints = getWallPoints w precisionWallHidden
         filteredWalls = filter (/=w) walls
 
 -- | Checks if a enemy is visible from the perspective of the player
 isEnemyVisible:: Mapa -> Enemy -> Bool
-isEnemyVisible walls e = any (id) $ map (isPointVisible walls) $ init $ tail $ getEnemyPoints e precisionWallHidden
+isEnemyVisible walls e = any (id) $ map (isPointVisible walls) $ getEnemyPoints e precisionWallHidden
+
+-- | Check if enemy is completely visible
+isEnemyFullyVisible:: Mapa -> Enemy -> Bool
+isEnemyFullyVisible walls e = all (id) $ map (isPointVisible walls) $ getEnemyPoints e precisionWallHidden
 
 -- | Checks if a point is visible
 isPointVisible:: [Wall] -> Coor -> Bool
 isPointVisible w p = not $ any isJust $ map (wallIntercept p) w
+
+-- | Checks if a given point is covered by any enemy
+isPointVisibleEnemy:: [Enemy] -> Coor -> Bool
+isPointVisibleEnemy e p = not $ any (id) $ map (enemyIntercept p) e
 
 -- | Get N points along a given Wall
 getWallPoints:: Wall -> Float -> [Coor]

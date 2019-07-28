@@ -11,6 +11,7 @@ import Enemy_Filter
 import Utils
 import Graphics.Gloss.Data.Picture
 import Graphics.Gloss.Data.Color
+import Data.List
 
 -- | Draw the entire state in 3D
 drawAll3D::Estado -> Picture
@@ -24,15 +25,20 @@ drawAll3D e = Pictures $ [floor, sky] ++ drawParts e m en ++ [iron]
         sky   = Color (makeColor (135/255) (206/255) (250/255) 1) $ Polygon [(-sx, 0), (sx,0), (sx,  sy), (-sx, sy)]
         iron  = target red $ min (fromIntegral(sxI)/22)(fromIntegral(syI)/22)
 
+
 drawParts:: Estado -> Mapa -> Enemies -> [Picture]
 drawParts e [] [] = []
-drawParts e w  [] = map (drawWall3D  e) w
+drawParts e w  [] = map (drawWall3D e)  w
 drawParts e [] en = map (drawEnemy3D e) en
-drawParts e (w:tm) (en:te) | dw < den  = ((drawEnemy3D e en) : (drawParts e (w:tm) te)) 
-                           | otherwise = ((drawWall3D  e w)  : (drawParts e tm (en:te)))
+drawParts e m  en | (null ven) && (null vw) && (dw < den) = ((drawEnemy3D e  (head en)) : (drawParts e  m       (tail en)))
+                  | (null ven) && (null vw)               = ((drawWall3D  e  (head m )) : (drawParts e (tail m)  en      ))
+                  | otherwise                             = (drawParts    e   hw hen) ++ (map (drawWall3D e) vw)++ (map (drawEnemy3D e) ven) 
     where
-        dw  = distWall w
-        den = distEnemy en
+        dw  = distWall  (head m)
+        den = distEnemy (head en)
+        (ven, hen) = partition (isEnemyFullyVisible m) en
+        (vw , hw ) = partition (isWallFullyVisible  m en) m
+
 
 -- | Draw a given wall in 3D
 drawWall3D:: Estado -> Wall -> Picture
