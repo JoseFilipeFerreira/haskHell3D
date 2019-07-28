@@ -18,13 +18,8 @@ reactEvent (EventKey (Char 'd')               s _ _) e = e{actions = (actions e)
 reactEvent (EventKey (SpecialKey KeyShiftL)   s _ _) e = e{actions = (actions e){run      = (s == Down) }}
 reactEvent (EventKey (SpecialKey KeyEnter)    s _ _) e = e{actions = (actions e){shoot    = (s == Down) }}
 reactEvent (EventKey (MouseButton LeftButton) s _ _) e = e{actions = (actions e){shoot    = (s == Down) }}
-reactEvent (EventMotion (x,_))                       e = e{player  = (player  e){xMove    = x}}
 reactEvent (EventKey (SpecialKey KeyLeft)  Down _ _) e = e{player  = (player  e){xMove    = -arrowRotationSpeed}}
-reactEvent (EventKey (SpecialKey KeyLeft)  Up   _ _) e = e{player  = (player  e){xMove    = nMove}}
-    where
-        nMove = if (xMove(player e) == -arrowRotationSpeed) then 0 else xMove $ player e
+reactEvent (EventKey (SpecialKey KeyLeft)  Up   _ _) e = e{player  = (player  e){xMove    = 0}}
 reactEvent (EventKey (SpecialKey KeyRight) Down _ _) e = e{player  = (player  e){xMove    = arrowRotationSpeed}}
-reactEvent (EventKey (SpecialKey KeyRight) Up   _ _) e = e{player  = (player  e){xMove    = nMove}}
-    where
-        nMove = if (xMove(player e) == arrowRotationSpeed) then 0 else xMove $ player e
+reactEvent (EventKey (SpecialKey KeyRight) Up   _ _) e = e{player  = (player  e){xMove    = 0}}
 reactEvent _ e = e
